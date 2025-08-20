@@ -178,7 +178,7 @@ function startGame() {
     src: "tap.mp3",
     autoplay: true,
   });
-  window.open('game.html', '_self');
+  window.open('./game.html', '_self');
 }
 
 function openDiscord() {
