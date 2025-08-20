@@ -1,0 +1,170 @@
+:root {
+    --color: #d4af37;
+    --base-size: 16px;
+}
+
+p {
+    font-size: calc(var(--base-size) * 0.9);
+    font-family: "Baloo 2", sans-serif;
+    margin: 0;
+    color: #7a7a7a;
+}
+
+button {
+    font-size: calc(var(--base-size) * 0.8);
+    font-family: "Baloo 2", sans-serif;
+}
+
+h1 {
+    font-size: calc(var(--base-size) * 2);
+    font-family: "Baloo 2", sans-serif;
+    margin: 0;
+}
+
+h2 {
+    font-size: calc(var(--base-size) * 1.5);
+    font-family: "Baloo 2", sans-serif;
+    margin: 0;
+}
+
+body {
+    color: var(--color);
+    text-align: center;
+    font-family: "Baloo 2", sans-serif;
+    touch-action: manipulation;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    filter: brightness(1) contrast(1) saturate(1);
+}
+
+::selection {
+    background-color: #666;
+    color: var(--color);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+em,
+div,
+span,
+a,
+button,
+input,
+textarea,
+label {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@media (max-width: 360px) {
+    :root {
+        --base-size: 5px;
+    }
+}
+
+@media (min-width: 360px) and (max-width: 420px) {
+    :root {
+        --base-size: 6px;
+    }
+}
+
+@media (min-width: 420px) and (max-width: 480px) {
+    :root {
+        --base-size: 7px;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 600px) {
+    :root {
+        --base-size: 8px;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 720px) {
+    :root {
+        --base-size: 10px;
+    }
+}
+
+@media (min-width: 720px) and (max-width: 900px) {
+    :root {
+        --base-size: 12px;
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1080px) {
+    :root {
+        --base-size: 15px;
+    }
+}
+
+@media (min-width: 1080px) and (max-width: 1260px) {
+    :root {
+        --base-size: 18px;
+    }
+}
+
+@media (min-width: 1260px) and (max-width: 1440px) {
+    :root {
+        --base-size: 22px;
+    }
+}
+
+@media (max-width: 1440px) and (min-width: 1720px) {
+    :root {
+        --base-size: 25px;
+    }
+}
+
+@media (max-width: 1720px) and (min-width: 2000px) {
+    :root {
+        --base-size: 28px;
+    }
+}
+
+@media (max-width: 2000px) and (min-width: 2280px) {
+    :root {
+        --base-size: 32px;
+    }
+}
+
+@media (max-width: 2280px) and (min-width: 2420px) {
+    :root {
+        --base-size: 36px;
+    }
+}
+
+@media (min-width: 2420px) {
+    :root {
+        --base-size: 40px;
+    }
+}
+
+.blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+    backdrop-filter: blur(calc(var(--base-size) * 0.2));
+    -webkit-backdrop-filter: blur(calc(var(--base-size) * 0.2));
+    display: none;
+}

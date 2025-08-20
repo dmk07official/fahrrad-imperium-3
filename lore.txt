@@ -1,0 +1,45 @@
+**Spielname:** *Fahrrad Imperium: Eine neue Welt*
+
+**Spielgenre:** Wirtschaftssimulation als Clicker mit Multiplayer-Modus
+
+**Setting und Lore:**
+Die Welt steht an der Schwelle zu einem neuen Zeitalter – dem **Zeitalter der Nachhaltigkeit**. Nach katastrophalen Umweltkatastrophen, Klimawandel und dem dramatischen Zusammenbruch des Ökosystems haben Regierungen weltweit drastische Maßnahmen beschlossen. Der Einsatz fossiler Brennstoffe ist strengstens verboten, Autos und Flugzeuge wurden zu Relikten der Vergangenheit. Städte sind frei von Abgasen und Lärm, stattdessen hört man überall das Surren von Fahrrädern und das Rauschen des Windes in den Straßen.
+
+Der größte Boom der Zeit: **Fahrräder**. Nicht nur als Fortbewegungsmittel, sondern als Symbol für Fortschritt und Freiheit. Die Fahrradindustrie hat sich von einem Hobby- und Freizeitsektor zu einem der wichtigsten Wirtschaftszweige der Welt entwickelt. Inmitten dieses Booms kommst **du** ins Spiel – ein visionärer Unternehmer mit dem Traum, ein Fahrradimperium zu errichten und die Welt mit deinen Innovationen zu prägen. Dein Ziel? Die besten, schnellsten und smartesten Fahrräder der neuen Welt zu entwickeln.
+
+### Die Story
+
+Du startest als junger Erfinder, vielleicht sogar aus einem kleinen Dorf oder einer verarmten Stadt, wo Fahrräder bisher nur zum Transport von Waren genutzt wurden. Doch du hast große Ideen. Dein erstes Produkt ist ein modulares Fahrrad, das sich an alle möglichen Umstände anpassen lässt – von Geländefahrten bis zur komfortablen Stadttour. Dein Konzept schlägt ein und du gründest deine erste kleine Werkstatt.
+
+Schnell zeigt sich jedoch, dass es in der Welt der Fahrradindustrie nicht nur um Technik, sondern auch um Politik und harte Konkurrenz geht. Große Unternehmen wollen ihre Monopole verteidigen und sehen in dir eine Gefahr. Sie heuern sogar Hacker an, um deine Designs zu stehlen, oder manipulieren Rohstofflieferungen, damit du an Bauteilen Mangel leidest. Hinzu kommt, dass politische Instanzen und Umweltbehörden die Technik streng regulieren: Ein Fehler kann dein Unternehmen direkt zu Fall bringen.
+
+### Gameplay
+
+1. **Forschung und Entwicklung**: Entwickle Fahrräder, die weit über das hinausgehen, was die Konkurrenz zu bieten hat. Nutze KI für selbstfahrende E-Bikes, finde nachhaltige Materialien, die leicht und robust sind, und entwickle neue Komforttechniken, die die Fortbewegung revolutionieren.
+
+2. **Politische Entscheidungen**: Immer wieder stehst du vor politischen Dilemmas. Möchtest du eng mit der Regierung zusammenarbeiten und dabei Subventionen bekommen, aber dafür strengeren Umweltauflagen folgen? Oder gehst du lieber den Weg eines “Rebellen” und versuchst, dich durch Schmuggelnetzwerke mit seltenen Materialien zu versorgen? Jede Entscheidung hat Auswirkungen auf dein Unternehmen, deine Reputation und die Welt.
+
+3. **Wirtschaftliche Herausforderungen**: Rohstoffe sind knapp, die Nachfrage ist hoch, und der Markt ist hart umkämpft. Du musst Strategien entwickeln, um deine Kosten niedrig zu halten, innovative Marketing-Kampagnen starten, und natürlich auch gelegentlich riskante Geschäfte eingehen, um dich über Wasser zu halten. Aber Vorsicht: Übermäßige Risikobereitschaft kann auch das Ende bedeuten.
+
+4. **Kooperation oder Rivalität**: Spiele allein oder mit anderen Spielern in einem dynamischen Multiplayer-Modus. Schließe dich Clans an, um gemeinsame Technologien zu entwickeln, oder werde Teil eines radikalen Underground-Netzwerks, das illegale, experimentelle Fahrräder herstellt. Du kannst deine Rivalen ausspionieren, ihnen Lieferungen sabotieren, oder durch geheime Abkommen exklusive Materialien beschaffen.
+
+5. **Events und Herausforderungen**: Im Laufe des Spiels werden immer wieder spezielle Events wie Wetterkatastrophen, politische Unruhen oder revolutionäre Technologien auftreten. Es gibt “Welt-Gipfel”, bei denen sich die Führungskräfte treffen und gemeinsame Standards setzen – oder den Untergang der anderen planen. 
+
+### Ziel des Spiels
+
+Am Ende geht es darum, dein Imperium an die Spitze der Fahrradindustrie zu bringen und es zur ersten Adresse für revolutionäre Technik, Umweltfreundlichkeit und Lifestyle zu machen. Jeder Meilenstein bringt dir neue Möglichkeiten und Herausforderungen, und jeder Schritt wird dir mehr Einfluss auf die neue Welt verleihen.
+
+### Ton und Atmosphäre
+
+Das Spiel sollte eine Mischung aus Humor und Ernsthaftigkeit haben. Manche Szenarien, wie ein übertrieben strenger Umweltinspektor, der jede Schraube an deinem Fahrrad kritisiert, sind humorvoll gestaltet. Andere, wie etwa die Herausforderungen, die der Klimawandel auch in dieser neuen Welt mit sich bringt, sind ernste Themen, die dem Spieler die Konsequenzen des Handelns spüren lassen.
+
+### Ein paar Beispielereignisse
+
+1. **Der Streik der Pedaleure** – Die Arbeiter, die die Fahrradpedale herstellen, gehen in den Streik und fordern bessere Arbeitsbedingungen. Du musst entscheiden, ob du ihre Forderungen erfüllst und dadurch höhere Produktionskosten hast oder riskierst, dass dein Ruf als “ethischer” Unternehmer Schaden nimmt.
+
+2. **Die Fahrrad-Bestenliste** – Einmal im Jahr wird das “Grünste Fahrrad des Jahres” gekürt, was Prestige und steigende Verkaufszahlen bringt. Kannst du dich durchsetzen und das umweltfreundlichste Modell der Saison entwickeln?
+
+3. **Der Verrückte Erfinder** – Ein exzentrischer Wissenschaftler kommt zu dir und bietet dir eine revolutionäre, aber vollkommen instabile Technologie an. Du könntest ein Fahrrad entwickeln, das sich selbst auflädt, aber wenn es schiefgeht, könnte das deinen Ruf ruinieren. Entscheidest du dich für das Risiko?
+
+**Schlussgedanke:**
+*Fahrrad Imperium: Eine neue Welt* bietet eine spannende Mischung aus Strategie, Humor und anspruchsvollen Entscheidungen. Die Spieler lernen, dass der Weg zu einer besseren Welt weder einfach noch konfliktfrei ist, und dass Fortschritt oft durch Mut und Einfallsreichtum erreicht wird.
