@@ -1,4 +1,4 @@
-const CACHE_NAME = "cache-v1";
+const CACHE_NAME = "cache-v2"; // Version hochgesetzt, wichtig!
 const ASSETS = [
   "/", 
   "/background-game.mp3",
@@ -6,7 +6,7 @@ const ASSETS = [
   "/coin.svg",
   "/discord-logo.png",
   "/farmer-m.png",
-  "/game-server.js",
+  // !!! /game-server.js NICHT hier reinpacken, sonst Ärger !!!
   "/game.css",
   "/game.html",
   "/game.js",
@@ -64,10 +64,16 @@ self.addEventListener("activate", event => {
   );
 });
 
-// Bei Anfragen immer erst Cache checken
+// Bei Anfragen erst Cache, dann Netz (mit ignoreSearch)
 self.addEventListener("fetch", event => {
+  // Sonderfall: game-server.js immer live, nicht cachen
+  if (event.request.url.includes("/game-server.js")) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then(response => {
+    caches.match(event.request, { ignoreSearch: true }).then(response => {
       return response || fetch(event.request);
     })
   );
