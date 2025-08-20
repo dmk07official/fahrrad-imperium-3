@@ -1,5 +1,3 @@
-loadProgress();
-
 //Speichern, Laden, Variablen
 let coins = 0;
 let prestigeCount = 0, prestigeMultiplier = 1, prestigeCost = 1000;
@@ -177,6 +175,8 @@ function loadProgress() {
   });
   backgroundMusic.play();
 }
+
+loadProgress();
 
 function parseNumberWithSuffix(text) {
   const suffixes = ['', 'K', 'M', 'B', 'T', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az'];
