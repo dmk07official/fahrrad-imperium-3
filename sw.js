@@ -1,0 +1,74 @@
+const CACHE_NAME = "cache-v1";
+const ASSETS = [
+  "/", 
+  "/background-game.mp3",
+  "/box-bg.png",
+  "/coin.svg",
+  "/discord-logo.png",
+  "/farmer-m.png",
+  "/game-server.js",
+  "/game.css",
+  "/game.html",
+  "/game.js",
+  "/global-css-variables.css",
+  "/green-arrow.png",
+  "/index.css",
+  "/index.html",
+  "/index.js",
+  "/logo.png",
+  "/main-theme.mp3",
+  "/mask1.png",
+  "/mask2.png",
+  "/mask3.png",
+  "/mask4.png",
+  "/mini-game.css",
+  "/mini-game.html",
+  "/mini-game.js",
+  "/obstacle1.png",
+  "/obstacle2.png",
+  "/online.svg",
+  "/point1.png",
+  "/point2.png",
+  "/powerup1.png",
+  "/prestige.svg",
+  "/prestige_ui.svg",
+  "/settings.svg",
+  "/shader.js",
+  "/tap.mp3",
+  "/tap.svg",
+  "/tiktok-logo.png",
+  "/truck.svg",
+  "/upgrades.svg",
+  "/window-bg.png",
+  "/work.svg",
+  "/workshop.svg",
+];
+
+// Service Worker installieren & Dateien cachen
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(ASSETS);
+    })
+  );
+});
+
+// Alte Caches löschen wenn neue Version da
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      );
+    })
+  );
+});
+
+// Bei Anfragen immer erst Cache checken
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
