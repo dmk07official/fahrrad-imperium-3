@@ -1,7 +1,11 @@
 const CACHE_NAME = "cache-v7";
 const STATIC_ASSETS = [
   "./",
+  "./index.html",
+  "./game.html",
+  "./mini-game.html",
   "./background-game.mp3",
+  "./main-theme.mp3",
   "./box-bg.png",
   "./coin.svg",
   "./discord-logo.png",
@@ -11,7 +15,6 @@ const STATIC_ASSETS = [
   "./index.css",
   "./index.js",
   "./logo.png",
-  "./main-theme.mp3",
   "./mask1.png",
   "./mask2.png",
   "./mask3.png",
@@ -40,9 +43,7 @@ const STATIC_ASSETS = [
 // Install: statische Assets cachen
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_ASSETS);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
 });
 
@@ -57,20 +58,26 @@ self.addEventListener("activate", event => {
   );
 });
 
-// Fetch: dynamisches Caching für HTML/JS/CSS/SVG
+// Fetch: dynamisches Caching + Fallbacks
 self.addEventListener("fetch", event => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // alles statische wie MP3/PNG aus Cache bedienen
+  // Statische Assets direkt aus Cache bedienen
   if (STATIC_ASSETS.includes(url.pathname)) {
     event.respondWith(
-      caches.match(req).then(cached => cached || fetch(req))
+      caches.match(req).then(cached => cached || fetch(req).catch(() => cached))
     );
     return;
   }
 
-  // dynamisch cache für HTML, JS, CSS, SVG
+  // Favicon oder andere "leere" Requests abfangen
+  if (url.pathname === "/favicon.ico") {
+    event.respondWith(new Response("", {status: 200, statusText: "OK"}));
+    return;
+  }
+
+  // Dynamisches Caching für HTML, JS, CSS, SVG
   if (req.destination === "document" || req.destination === "script" || req.destination === "style" || req.destination === "image") {
     event.respondWith(
       fetch(req)
@@ -80,11 +87,14 @@ self.addEventListener("fetch", event => {
           caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
           return resp;
         })
-        .catch(() => caches.match(req))
+        .catch(() =>
+          caches.match(req) ||
+          new Response("Offline", {status: 200, statusText: "OK"})
+        )
     );
     return;
   }
 
-  // alles andere normal weiterleiten
-  event.respondWith(fetch(req));
+  // Alles andere normal weiterleiten
+  event.respondWith(fetch(req).catch(() => caches.match(req)));
 });
