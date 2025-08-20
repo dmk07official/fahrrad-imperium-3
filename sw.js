@@ -1,19 +1,14 @@
-const CACHE_NAME = "cache-v3";
-const ASSETS = [
-  "./", 
+const CACHE_NAME = "cache-v4";
+const STATIC_ASSETS = [
+  "./",
   "./background-game.mp3",
   "./box-bg.png",
   "./coin.svg",
   "./discord-logo.png",
   "./farmer-m.png",
-  // ./game-server.js NICHT cachen, immer live!
   "./game.css",
-  "./game.html",
-  "./game.js",
-  "./global-css-variables.css",
   "./green-arrow.png",
   "./index.css",
-  "./index.html",
   "./index.js",
   "./logo.png",
   "./main-theme.mp3",
@@ -22,8 +17,6 @@ const ASSETS = [
   "./mask3.png",
   "./mask4.png",
   "./mini-game.css",
-  "./mini-game.html",
-  "./mini-game.js",
   "./obstacle1.png",
   "./obstacle2.png",
   "./online.svg",
@@ -44,43 +37,54 @@ const ASSETS = [
   "./workshop.svg",
 ];
 
-// Service Worker installieren & Dateien cachen (mit Error-Logging)
+// Install: statische Assets cachen
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async cache => {
-      for (const asset of ASSETS) {
-        try {
-          await cache.add(asset);
-          console.log("Gecacht:", asset);
-        } catch (e) {
-          console.error("Konnte nicht cachen:", asset, e);
-        }
-      }
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(STATIC_ASSETS);
     })
   );
 });
 
-// Alte Caches löschen wenn neue Version da
+// Activate: alte Caches löschen
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
+    caches.keys().then(keys =>
+      Promise.all(
         keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-      );
-    })
+      )
+    )
   );
 });
 
-// Bei Anfragen erst Cache, dann Netz (mit ignoreSearch)
+// Fetch: dynamisches Caching für HTML/JS/CSS/SVG
 self.addEventListener("fetch", event => {
-  if (event.request.url.includes("/game-server.js")) {
-    event.respondWith(fetch(event.request));
+  const req = event.request;
+  const url = new URL(req.url);
+
+  // alles statische wie MP3/PNG aus Cache bedienen
+  if (STATIC_ASSETS.includes(url.pathname)) {
+    event.respondWith(
+      caches.match(req).then(cached => cached || fetch(req))
+    );
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request, { ignoreSearch: true }).then(response => {
-      return response || fetch(event.request);
-    })
-  );
+  // dynamisch cache für HTML, JS, CSS, SVG
+  if (req.destination === "document" || req.destination === "script" || req.destination === "style" || req.destination === "image") {
+    event.respondWith(
+      fetch(req)
+        .then(resp => {
+          if (!resp.ok || resp.type === "opaque") return resp;
+          const copy = resp.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+          return resp;
+        })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // alles andere normal weiterleiten
+  event.respondWith(fetch(req));
 });
