@@ -1,41 +1,4 @@
-//Cache Erstellen
-
-const CACHE_NAME = 'site-assets-v1';
-const REQUIRED_FILES = [
-    'green-arrow.png',
-    'coin.svg',
-    'prestige.svg',
-    'tap.svg',
-    'work.svg',
-    'background-game.mp3',
-];
-
-async function checkAndInstallFiles() {
-    const cache = await caches.open(CACHE_NAME);
-    const cachedRequests = await cache.keys();
-    
-    const cachedUrls = cachedRequests.map(request => new URL(request.url).pathname);
-    const missingFiles = REQUIRED_FILES.filter(file => !cachedUrls.includes(file));
-    
-    if (missingFiles.length === 0) {
-        loadProgress();        
-    } else {
-        await Promise.all(missingFiles.map(async (file) => {
-            const response = await fetch(file);
-            if (response.ok) {
-                await cache.put(file, response);
-            } else {
-            }
-        }));
-        loadProgress();
-    }
-}
-
-window.addEventListener('load', () => {
-    checkAndInstallFiles().catch(error => {
-        console.error("Fehler beim Überprüfen/Installieren der Dateien:", error);
-    });
-});
+loadProgress();
 
 //Speichern, Laden, Variablen
 let coins = 0;
