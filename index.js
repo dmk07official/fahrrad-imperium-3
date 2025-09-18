@@ -64,11 +64,16 @@ function playTheme() {
 }
 
 let message = "🚲 Fahrrad Imperium 3 🚲"; 
-let dots = " ..... ";
+let dots = " ..... "; 
 let ticker = message + dots;
 let pos = 0;
 
-let speed = 600; // ms pro Schritt
+// Device check für iOS
+let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+// Adaptive Geschwindigkeit
+let speed = isIOS ? 700 : 200; // ms pro Schritt
+
 let lastTime = 0;
 
 function scrollTitle(timestamp) {
@@ -76,13 +81,14 @@ function scrollTitle(timestamp) {
 
   if (timestamp - lastTime >= speed) {
     document.title = ticker.substring(pos) + ticker.substring(0, pos);
-    pos = (pos + 2) % ticker.length;
+    pos = (pos + 1) % ticker.length;
     lastTime = timestamp;
   }
 
   requestAnimationFrame(scrollTitle);
 }
 
+// Start
 requestAnimationFrame(scrollTitle);
 
 function openPopup(popupId) {
