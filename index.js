@@ -63,15 +63,27 @@ function playTheme() {
   });
 }
 
-let message = "Fahrrad Imperium 3";
-let dots = ".....";
-let ticker = message + dots; 
+let message = "🚲 Fahrrad Imperium 3 🚲"; 
+let dots = " ..... ";
+let ticker = message + dots;
 let pos = 0;
 
-setInterval(() => {
-  document.title = ticker.substring(pos) + ticker.substring(0, pos);
-  pos = (pos + 1) % ticker.length;
-}, 500);
+let speed = 300; // ms pro Schritt
+let lastTime = 0;
+
+function scrollTitle(timestamp) {
+  if (!lastTime) lastTime = timestamp;
+
+  if (timestamp - lastTime >= speed) {
+    document.title = ticker.substring(pos) + ticker.substring(0, pos);
+    pos = (pos + 1) % ticker.length;
+    lastTime = timestamp;
+  }
+
+  requestAnimationFrame(scrollTitle);
+}
+
+requestAnimationFrame(scrollTitle);
 
 function openPopup(popupId) {
   var sound = new Howl({
