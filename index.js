@@ -63,6 +63,16 @@ function playTheme() {
   });
 }
 
+let message = "🚲 Fahrrad Imperium 3 🚲"; // Dein Text
+let dots = " ..... "; // Punkte dazwischen für Lauf-Effekt
+let ticker = message + dots; 
+let pos = 0;
+
+setInterval(() => {
+  document.title = ticker.substring(pos) + ticker.substring(0, pos);
+  pos = (pos + 1) % ticker.length;
+}, 300); // Geschwindigkeit anpassen (ms)
+
 function openPopup(popupId) {
   var sound = new Howl({
     src: "tap.mp3",
