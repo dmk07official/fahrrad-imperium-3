@@ -68,7 +68,7 @@ let dots = " ..... ";
 let ticker = message + dots;
 let pos = 0;
 
-let speed = 300; // ms pro Schritt
+let speed = 600; // ms pro Schritt
 let lastTime = 0;
 
 function scrollTitle(timestamp) {
@@ -76,7 +76,7 @@ function scrollTitle(timestamp) {
 
   if (timestamp - lastTime >= speed) {
     document.title = ticker.substring(pos) + ticker.substring(0, pos);
-    pos = (pos + 1) % ticker.length;
+    pos = (pos + 2) % ticker.length;
     lastTime = timestamp;
   }
 
