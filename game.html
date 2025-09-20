@@ -1749,6 +1749,34 @@
                 </div>
             </div>
 
+
+
+
+
+            <button id="fullscreenBtn">Go Fullscreen</button>
+
+<script>
+const btn = document.getElementById('fullscreenBtn');
+
+btn.addEventListener('click', () => {
+    const el = document.documentElement; // Ganze Seite fullscreen
+    // Standard Fullscreen API
+    if (el.requestFullscreen) {
+        el.requestFullscreen().catch(err => console.log(err));
+    } 
+    // Safari iOS & ältere Webkit
+    else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+    } 
+    // iOS Safari für Videos speziell (falls du Video fullscreen willst)
+    else if (el.webkitEnterFullscreen) {
+        el.webkitEnterFullscreen(); // Nur bei <video>
+    } else {
+        alert('Fullscreen nicht unterstützt 😭');
+    }
+});
+</script>
+
             <div class="online-container-header">
                 <h2 class="button-row-header" style="margin-top: 0.65em; margin-bottom: 0.35em">Rangliste - Geld</h2>
                 <h2 class="button-row-header" style="margin-top: 0.65em; margin-bottom: 0.35em">
