@@ -166,6 +166,27 @@ startSaveInterval();
 }
 
 
+window.addEventListener('load', () => {
+  const scrollElements = document.querySelectorAll('.window, .chat-box');
+
+  scrollElements.forEach(el => {
+    // Direkt auf 0 setzen
+    el.scrollTop = 0;
+
+    // Wenn du mit transform scrollst, falls du das benutzt:
+    if (!el.scrollTop) {
+      // fallback, falls transform-scroll
+      el.style.transform = `translateY(0px)`;
+      const s = { startY: 0, scrollY: 0 };
+      state.set(el, s);
+    }
+  });
+
+  // Body scroll evtl auch resetten, falls Safari etwas verschiebt
+  window.scrollTo(0, 0);
+});
+
+
 // State pro Scroll-Element
 const scrollElements = document.querySelectorAll('.window, .chat-box');
 const state = new Map();
