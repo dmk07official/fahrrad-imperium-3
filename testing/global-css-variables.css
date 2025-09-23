@@ -73,7 +73,7 @@ select,option{
 -moz-user-select: none;
 -ms-user-select: none;
 user-select: none;
-draggable: false;
+touch-action: none;
 }
 
 @media (max-width: 359px){
