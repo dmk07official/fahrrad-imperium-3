@@ -166,34 +166,14 @@ startSaveInterval();
 }
 
 
-window.addEventListener('load', () => {
-  const scrollElements = document.querySelectorAll('.window, .chat-box');
-
-  scrollElements.forEach(el => {
-    // Direkt auf 0 setzen
-    el.scrollTop = 0;
-
-    // Wenn du mit transform scrollst, falls du das benutzt:
-    if (!el.scrollTop) {
-      // fallback, falls transform-scroll
-      el.style.transform = `translateY(0px)`;
-      const s = { startY: 0, scrollY: 0 };
-      state.set(el, s);
-    }
-  });
-
-  // Body scroll evtl auch resetten, falls Safari etwas verschiebt
-  window.scrollTo(0, 0);
-});
-
-
 // State pro Scroll-Element
-const scrollElements = document.querySelectorAll('.window, .chat-box');
+const scrollElements = document.querySelectorAll('.window');
 const state = new Map();
 
+// Initialisiere State
 scrollElements.forEach(el => {
   state.set(el, { startY: 0, scrollY: 0 });
-  
+
   el.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       const s = state.get(el);
@@ -219,6 +199,32 @@ scrollElements.forEach(el => {
       s.startY = e.touches[0].clientY;
     }
   }, { passive: false });
+});
+
+// Funktion um Scroll-Position auf 0 zu resetten (Safari Fix)
+function resetScroll() {
+  scrollElements.forEach(el => {
+    el.scrollTop = 0;
+
+    if (state.has(el)) {
+      const s = state.get(el);
+      s.scrollY = 0;
+      s.startY = 0;
+    }
+
+    // Falls transform-basiertes Scrollen
+    el.style.transform = 'translateY(0px)';
+  });
+
+  // Body scroll auf Top
+  window.scrollTo(0,0);
+}
+
+// Beim Laden: Safari Fix mehrfach ausführen
+window.addEventListener('load', () => {
+  resetScroll();
+  setTimeout(resetScroll, 50);
+  setTimeout(resetScroll, 150);
 });
 
 
