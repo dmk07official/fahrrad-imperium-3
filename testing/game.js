@@ -171,7 +171,7 @@ const state = new Map();
 
 scrollElements.forEach(el => {
   state.set(el, { startY: 0, scrollY: 0 });
-  
+
   el.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       const s = state.get(el);
@@ -184,19 +184,21 @@ scrollElements.forEach(el => {
       e.preventDefault();
       const s = state.get(el);
       const delta = s.startY - e.touches[0].clientY;
-      s.scrollY += delta;
 
-      const maxScroll = el.scrollHeight - el.clientHeight;
-      if (s.scrollY < 0) s.scrollY = 0;
-      if (s.scrollY > maxScroll) s.scrollY = maxScroll;
-
-      el.scrollTop = s.scrollY;
+      if(el === window){
+        window.scrollBy(0, delta);
+      } else {
+        s.scrollY += delta;
+        const maxScroll = el.scrollHeight - el.clientHeight;
+        if (s.scrollY < 0) s.scrollY = 0;
+        if (s.scrollY > maxScroll) s.scrollY = maxScroll;
+        el.scrollTop = s.scrollY;
+      }
 
       s.startY = e.touches[0].clientY;
     }
   }, { passive: false });
 });
-
 
 
 // Formatierung
