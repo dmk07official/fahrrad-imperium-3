@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1000" />
+<title>Fahrrad Imperium / Spiel</title>
+<link rel="stylesheet" href="global-css-variables.css" />
+<link rel="stylesheet" href="game.css" />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet" />
+</head>
+<body oncontextmenu="return false;">
+<div class="container">
+
+<div class="blur" id="blur"></div>
+<div class="prestige-fade"></div>
+
+<div class="window-choose">
+<button
+class="window-choose-button active"
+id="werkstatt"
+onclick="toggleActiveWindowChoose('werkstatt')">
+<img class="window-choose-icon" src="workshop.svg" draggable="false"/>
+</button>
+<button 
+class="window-choose-button"
+id="upgrades"
+onclick="toggleActiveWindowChoose('upgrades')">
+<img class="window-choose-icon" src="upgrades.svg" draggable="false"/>
+</button>
+<button
+class="window-choose-button"
+id="teileLieferant"
+onclick="toggleActiveWindowChoose('teileLieferant')">
+<img class="window-choose-icon" src="truck.svg" draggable="false"/>
+</button>
+<button class="window-choose-button" 
+id="prestige" onclick="toggleActiveWindowChoose('prestige')">
+<img class="window-choose-icon" src="prestige_ui.svg" draggable="false"/>
+</button>
+<button class="window-choose-button" 
+id="online" 
+onclick="toggleActiveWindowChoose('online')">
+<img class="window-choose-icon" src="online.svg" draggable="false"/>
+</button>
+<button
+class="window-choose-button"
+id="einstellungen"
+onclick="toggleActiveWindowChoose('einstellungen')">
+<img class="window-choose-icon" src="settings.svg" draggable="false"/>
+</button>
+</div>
+
+<div class="ui">
+<div class="ui-element">
+<img class="ui-icon" src="coin.svg" draggable="false"/>
+<p class="ui-text">
+<span id="coins">0</span>
+</p>
+</div>
+<div class="ui-element">
+<img class="ui-icon" src="prestige.svg" draggable="false"/>
+<p class="ui-text">
+<span id="prestigeLevel">0</span>
+</p>
+</div>
+<div class="ui-element">
+<p class="ui-text">
+<span id="currentDate"></span>
+</p>
+</div>
+<div class="prestige-progress-bar">
+<div class="prestige-progress-fill"></div>
+</div>
+</div>
+
+<div class="window" id="windowWerkstatt" style="opacity: 1; width: 100%; min-height: 100vh">
+<div style="height: calc(var(--s) * 2)"></div>
+
+<div class="top-line">
+<div class="orders-half">
+<div class="order-container">
+<h2 class="orders-header">Aufträge</h2>
+<div class="orders-row">
+<div id="order1" class="order passive">Passiv</div>
+<div id="order2" class="order passive">Passiv</div>
+</div>
+<div class="orders-row">
+<div id="order3" class="order passive">Passiv</div>
+<div id="order4" class="order passive">Passiv</div>
+</div>
+</div>
+</div>
+<div class="players-half">
+<div class="player-container">
+<div id="playerStatus" class="player-status"></div>
+<h2 class="player-header">Spieler</h2>
+<div class="player-field" id="player"></div>
+<button class="change-job-level" onclick="openJobStage()">Jobstufe ändern</button>
+</div>
+</div>
+</div>
+
+<div class="job-stage-container" id="jobStageContainer">
+<div class="job-stage" id="jobStage">
+<h2 class="popup-header">Jobstufe ändern</h2>
+<div class="job-stage-info-container">
+
+<div class="job-stage-text-container">
+<h2 class="job-stage-header">
+Beschreibung:
+</h2>
+<p class="job-stage-text" id="jobStageText1">
+Du beginnst deine Karriere in der Fahrradwelt mit einfachen Reparaturen und
+Wartungsarbeiten. Ob ein platter Reifen, eine quietschende Kette oder eine
+schwächelnde Bremse – du sorgst dafür, dass jedes Fahrrad wieder reibungslos fährt.
+</p>
+<p class="job-stage-text" id="jobStageText2">
+Dank deiner wachsenden Erfahrung und besseren Werkzeugen kannst du nicht mehr nur
+einfache Defekte beheben, sondern auch komplexere Reparaturen durchführen und dich
+somit von anderen Werkstätten abheben.
+</p>
+<p class="job-stage-text" id="jobStageText3">
+Während du an den Rädern arbeitest, erkennst du das Potenzial für individuelle
+Anpassungen. Du beginnst, Fahrräder nicht nur zu reparieren, sondern sie mit
+einzigartigen Designs, besseren Komponenten und Speziallackierungen zu
+personalisieren.
+</p>
+<p class="job-stage-text" id="jobStageText4">
+Deine speziell entwickelten Tuning-Teile erfreuen sich großer Beliebtheit. Statt sie
+nur in deiner Werkstatt zu verbauen, startest du die Massenproduktion und vertreibst
+deine eigenen Komponenten. Fahrradliebhaber aus aller Welt schwören auf deine
+Qualität und Innovationen.
+</p>
+<p class="job-stage-text" id="jobStageText5">
+Dein Name steht mittlerweile für exzellente Fahrradtechnik und innovative Designs.
+Große Unternehmen aus der Branche wollen mit dir zusammenarbeiten und bieten dir
+lukrative Sponsoring-Deals an. Dein kleines Fahrradgeschäft hat sich zu einer echten
+Marke entwickelt – du bist ein echter Player im Fahrrad-Business!
+</p>
+</div>
+
+<div class="job-stage-job-container">
+<h2  class="job-stage-header">
+Mögliche Jobs:
+</h2>
+<div id="jobStageJob1" class="job-stage-job">
+<div class="job-stage-job-inner">
+<p class="job-stage-job-header">Ketten Ölen</p>
+</div>
+<div class="job-stage-job-inner">
+<p class="job-stage-job-info">Arbeit: 10</p>
+<p class="job-stage-job-info">Grundgewinn: 10</p>
+</div>
+</div>
+<div id="jobStageJob2" class="job-stage-job">
+<div class="job-stage-job-inner">
+<p class="job-stage-job-header">Fahrrad putzen</p>
+</div>
+<div class="job-stage-job-inner">
+<p class="job-stage-job-info">Arbeit: 25</p>
+<p class="job-stage-job-info">Grundgewinn: 27.5</p>
+</div>
+</div>
+<div id="jobStageJob3" class="job-stage-job">
+<div class="job-stage-job-inner">
+<p class="job-stage-job-header">Bremsen einstellen</p>
+</div>
+<div class="job-stage-job-inner">
+<p class="job-stage-job-info">Arbeit: 50</p>
+<p class="job-stage-job-info">Grundgewinn: 60</p>
+</div>
+</div>
+<div id="jobStageJob4" class="job-stage-job">
+<div class="job-stage-job-inner">
+<p class="job-stage-job-header">Federung tauschen</p>
+</div>
+<div class="job-stage-job-inner">
+<p class="job-stage-job-info">Arbeit: 100</p>
+<p class="job-stage-job-info">Grundgewinn: 130</p>
+</div>
+</div>
+<div id="jobStageJob5" class="job-stage-job">
+<div class="job-stage-job-inner">
+<p class="job-stage-job-header">Rahmen schweißen</p>
+</div>
+<div class="job-stage-job-inner">
+<p class="job-stage-job-info">Arbeit: 250</p>
+<p class="job-stage-job-info">Grundgewinn: 350</p>
+</div>
+</div>
+<div id="jobStageJob6" class="job-stage-job">
+<div class="job-stage-job-inner">
+<p class="job-stage-job-header">Neu lackieren</p>
+</div>
+<div class="job-stage-job-inner">
+<p class="job-stage-job-info">Arbeit: 500</p>
+<p class="job-stage-job-info">Grundgewinn: 750</p>
+</div>
+</div>
+<div id="jobStageJob7" class="job-stage-job">
+<div class="job-stage-job-inner">
+<p class="job-stage-job-header">Fahrrad tunen</p>
+</div>
+<div class="job-stage-job-inner">
+<p class="job-stage-job-info">Arbeit: 1K</p>
+<p class="job-stage-job-info">Grundgewinn: 1,75K</p>
+</div>
+</div>
+<div id="jobStageJob8" class="job-stage-job">
+<div class="job-stage-job-inner">
+<p class="job-stage-job-header">Custom Paintjob</p>
+</div>
+<div class="job-stage-job-inner">
+<p class="job-stage-job-info">Arbeit: 2,5K</p>
+<p class="job-stage-job-info">Grundgewinn: 5K</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="job-stage-buttons">
+<button id="jobStageButton1" class="job-stage-button" onclick="changeJobStage(1)">
+Jobstufe I
+</button>
+<button id="jobStageButton2" class="job-stage-button" onclick="changeJobStage(2)">
+Jobstufe II
+</button>
+<button id="jobStageButton3" class="job-stage-button" onclick="changeJobStage(3)">
+Jobstufe III
+</button>
+<button id="jobStageButton4" class="job-stage-button" onclick="changeJobStage(4)">
+Jobstufe IV
+</button>
+<button id="jobStageButton5" class="job-stage-button" onclick="changeJobStage(5)">
+Jobstufe V
+</button>
+<button id="jobStageButton6" class="job-stage-button" onclick="changeJobStage(6)">
+Jobstufe VI
+</button>
+<button class="job-stage-button locked">Kommt bald</button>
+<button class="job-stage-button locked">Kommt bald</button>
+<button class="job-stage-button locked">Kommt bald</button>
+<button class="job-stage-button locked">Kommt bald</button>
+</div>
+</div>
+</div>
+
+<div id="workers">
+<div class="worker worker1">
+<div id="workerStatus1" class="worker-status"></div>
+<h2 class="worker-header">Arbeiter 1</h2>
+<div class="worker-field" id="worker1"><p>Kein Job</p></div>
+</div>
+<div class="worker worker2">
+<div id="workerStatus2" class="worker-status"></div>
+<h2 class="worker-header">Arbeiter 2</h2>
+<div class="worker-field" id="worker2"><p>Kein Job</p></div>
+</div>
+<div class="worker worker3">
+<div id="workerStatus3" class="worker-status"></div>
+<h2 class="worker-header">Arbeiter 3</h2>
+<div class="worker-field" id="worker3"><p>Kein Job</p></div>
+</div>
+<div class="worker worker4">
+<div id="workerStatus4" class="worker-status"></div>
+<h2 class="worker-header">Arbeiter 4</h2>
+<div class="worker-field" id="worker4"><p>Kein Job</p></div>
+</div>
+</div>
+
+<div class="selector-container" id="selectorContainer">
+<div class="selector" id="selector">
+<h2 class="popup-header" id="selectorJob">Job zuweisen</h2>
+<div style="display: flex; align-items: center; justify-content: center; flex-direction: row;">
+<div class="selector-bundle">
+<div>
+<div class="selector-worker">
+<div id="workerStatusSelector1" class="worker-status-selector"></div>
+<h2 class="worker-selector-header">Arbeiter 1</h2>
+<div class="worker-field-selector" id="workerSelector1"><p>Kein Job</p></div>
+</div>
+<button id="selectorWorker1" class="selector-button" onclick="worker1()">
+Job zuweisen
+</button>
+</div>
+<div>
+<div class="selector-worker">
+<div id="workerStatusSelector2" class="worker-status-selector"></div>
+<h2 class="worker-selector-header">Arbeiter 2</h2>
+<div class="worker-field-selector" id="workerSelector2"><p>Kein Job</p></div>
+</div>
+<button id="selectorWorker2" class="selector-button" onclick="worker2()">
+Job zuweisen
+</button>
+</div>
+<div>
+<div class="selector-worker">
+<div id="workerStatusSelector3" class="worker-status-selector"></div>
+<h2 class="worker-selector-header">Arbeiter 3</h2>
+<div class="worker-field-selector" id="workerSelector3"><p>Kein Job</p></div>
+</div>
+<button id="selectorWorker3" class="selector-button" onclick="worker3()">
+Job zuweisen
+</button>
+</div>
+<div>
+<div class="selector-worker">
+<div id="workerStatusSelector4" class="worker-status-selector"></div>
+<h2 class="worker-selector-header">Arbeiter 4</h2>
+<div class="worker-field-selector" id="workerSelector4"><p>Kein Job</p></div>
+</div>
+<button id="selectorWorker4" class="selector-button" onclick="worker4()">
+Job zuweisen
+</button>
+</div>
+<div>
+<div class="selector-player">
+<div id="playerStatusSelector" class="worker-status-selector"></div>
+<h2 class="player-selector-header">Spieler</h2>
+<div class="player-field-selector" id="playerSelector"><p>Kein Job</p></div>
+</div>
+<button id="selectorPlayer" class="selector-button" onclick="player()">
+Job zuweisen
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="window" id="windowUpgrades">
+
+<div class="upgrade-container">
+<h2 class="window-header">Upgrades Stufe I</h2>
+	
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Bezahlung von Spieler verbessern um <span style="color: var(--c)">5</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeCoinsPlayerLevelI"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeCoinsPlayerI"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeCoinsPlayerI"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeCoinsPlayerI" onclick="buyUpgradeCoinsPlayerI()">
+<span class="upgrade-button-price-container">
+<span id="upgradeCoinsPlayerCostI" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Bezahlung von Mitarbeitern verbessern um <span style="color: var(--c)">5</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeCoinsWorkerLevelI"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeCoinsWorkerI"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeCoinsWorkerI"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeCoinsWorkerI" onclick="buyUpgradeCoinsWorkerI()">
+<span class="upgrade-button-price-container">
+<span id="upgradeCoinsWorkerCostI" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Bezahlung verbessern um <span style="color: var(--c)">10</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeCoinsLevelI"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeCoinsI"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeCoinsI"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeCoinsI" onclick="buyUpgradeCoinsI()">
+<span class="upgrade-button-price-container">
+<span id="upgradeCoinsCostI" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Tippstärke Spieler verbessern um <span style="color: var(--c)">0.5</span></p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level: <span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeStrengthPlayerLevelI"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeStrengthPlayerI"></span>
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeStrengthPlayerI"></span></p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeStrengthPlayerI" onclick="buyUpgradeStrengthPlayerI()">
+<span class="upgrade-button-price-container">
+<span id="upgradeStrengthPlayerCostI" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Jobsuche Stufe I & II verkürzen um <span style="color: var(--c)">1</span> Tick</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeJobLevelI"></span>/9</p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeJobI"></span>
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeJobI"></span>
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeJobI" onclick="buyUpgradeJobI()">
+<span class="upgrade-button-price-container">
+<span id="upgradeJobCostI" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+</div>
+
+<div class="upgrade-container">
+<h2 class="window-header">Upgrades Stufe II</h2>
+
+<div
+id="upgradeIIUnlock"
+style="
+margin: 0;
+padding: 0;
+height: calc(var(--s) * 51);
+flex-direction: column;
+align-items: center;">
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Bezahlung von Spieler verbessern um <span style="color: var(--c)">5</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeCoinsPlayerLevelII"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeCoinsPlayerII"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeCoinsPlayerII"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeCoinsPlayerII" onclick="buyUpgradeCoinsPlayerII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeCoinsPlayerCostII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Bezahlung verbessern um <span style="color: var(--c)">10</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeCoinsLevelII"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeCoinsII"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeCoinsII"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeCoinsII" onclick="buyUpgradeCoinsII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeCoinsCostII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Tippstärke Arbeiter verbessern um <span style="color: var(--c)">0.2</span></p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeStrengthWorkerLevelII"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeStrengthWorkerII"></span>
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeStrengthWorkerII"></span>
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeStrengthWorkerII" onclick="buyUpgradeStrengthWorkerII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeStrengthWorkerCostII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Teile Lieferant (Gamble) Gewinn-Chance erhöhen um<span style="color: var(--c)">2.5</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeDeliveryChanceLevelII"></span>/12</p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeDeliveryChanceII"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeDeliveryChanceII"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeDeliveryChanceII" onclick="buyUpgradeDeliveryChanceII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeDeliveryChanceCostII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Jobsuche Stufe III & IV verkürzen um <span style="color: var(--c)">1</span> Tick</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeJobLevelII"></span>/9</p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeJobII"></span>
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeJobII"></span>
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeJobII" onclick="buyUpgradeJobII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeJobCostII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+</div>
+
+<div id="upgradeIILock">
+<p>Wird ab der 6. Neueröffnung freigeschaltet</p>
+</div>
+</div>
+
+<div class="upgrade-container">
+<h2 class="window-header">Upgrades Stufe III</h2>
+
+<div
+id="upgradeIIIUnlock"
+style="
+margin: 0;
+padding: 0;
+height: calc(var(--s) * 51);
+flex-direction: column;
+align-items: center;">
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Bezahlung verbessern um <span style="color: var(--c)">5</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeCoinsLevelIII"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeCoinsIII"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeCoinsIII"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeCoinsIII" onclick="buyUpgradeCoinsIII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeCoinsCostIII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Tippstärke Spieler verbessern um <span style="color: var(--c)">1</span></p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeStrengthPlayerLevelIII"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeStrengthPlayerIII"></span>
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeStrengthPlayerIII"></span>
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeStrengthPlayerIII" onclick="buyUpgradeStrengthPlayerIII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeStrengthPlayerCostIII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Positive Auswirkung vom Teile Lieferant verstärken um <span style="color: var(--c)">5</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeDeliveryLevelIII"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeDeliveryIII"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeDeliveryIII"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeDeliveryIII" onclick="buyUpgradeDeliveryIII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeDeliveryCostIII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Bezahlung von Mitarbeitern verbessern um <span style="color: var(--c)">200</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeCoinsWorkerLevelIII"></span>/10</p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeCoinsWorkerIII"></span>%
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeCoinsWorkerIII"></span>%
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeCoinsWorkerIII" onclick="buyUpgradeCoinsWorkerIII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeCoinsWorkerCostIII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Jobsuche Stufe V & VI verkürzen um <span style="color: var(--c)">1</span> Tick</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="upgradeJobLevelIII"></span>/9</p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentUpgradeJobIII"></span>
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextUpgradeJobIII"></span></p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="upgradeJobIII" onclick="buyUpgradeJobIII()">
+<span class="upgrade-button-price-container">
+<span id="upgradeJobCostIII" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+</div>
+
+<div id="upgradeIIILock">
+<p>Wird ab der 12. Neueröffnung freigeschaltet</p>
+</div>
+</div>
+
+<div class="upgrade-container" style="height: calc(var(--s) * 23.75)">
+<h2 class="window-header">Arbeiter ausbilden</h2>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Klickzeit von Arbeiter 1 reduzieren um <span style="color: var(--c)">20</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level: <span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="worker1Level"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentworker1"></span>sek.
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextworker1"></span>sek.
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="workerUpgrade_worker1" onclick="upgradeWorker('worker1')">
+<span class="upgrade-button-price-container">
+<span id="upgradeCostworker1" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Klickzeit von Arbeiter 2 reduzieren um <span style="color: var(--c)">20</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="worker2Level"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentworker2"></span>sek.
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextworker2"></span>sek.
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="workerUpgrade_worker2" onclick="upgradeWorker('worker2')">
+<span class="upgrade-button-price-container">
+<span id="upgradeCostworker2" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Klickzeit von Arbeiter 3 reduzieren um <span style="color: var(--c)">20</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="worker3Level"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentworker3"></span>sek.
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextworker3"></span>sek.
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="workerUpgrade_worker3" onclick="upgradeWorker('worker3')">
+<span class="upgrade-button-price-container">
+<span id="upgradeCostworker3" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+
+<div class="upgrade">
+<div class="upgrade-info">
+<p style="margin-bottom: calc(var(--s) * 0.5)">Klickzeit von Arbeiter 4 reduzieren um <span style="color: var(--c)">20</span>%</p>
+<div style="height: calc(var(--s) * 2); display: flex; flex-direction: row">
+<div class="upgrade-info-content-container">
+<p class="upgrade-info-content-text">Level:<span style="color: var(--c); margin-left: calc(var(--s) * 0.5)" id="worker4Level"></span></p>
+</div>
+<div class="upgrade-info-content-container" style="margin-left: calc(var(--s) * 1)">
+<p class="upgrade-info-content-text">
+<span style="color: var(--c)" id="currentworker4"></span>sek.
+<img class="upgrade-green-arrow" src="green-arrow.png" draggable="false"/>
+<span style="margin-left: calc(var(--s) * 0.5); color: var(--c)" id="nextworker4"></span>sek.
+</p>
+</div>
+</div>
+</div>
+<div class="upgrade-info-button-container">
+<button class="upgrade-button" id="workerUpgrade_worker4" onclick="upgradeWorker('worker4')">
+<span class="upgrade-button-price-container">
+<span id="upgradeCostworker4" class="upgrade-button-price"></span>
+<img class="upgrade-icon" src="coin.svg" draggable="false"/>
+</span>
+</button>
+</div>
+</div>
+</div>
+
+<button class="upgrade-button-ui-left" onclick="prevSlide()">
+<img class="upgrade-gold-arrow" src="gold-arrow.png" style="rotate: 180deg" draggable="false"/>
+</button>
+
+<button class="upgrade-button-ui-right" onclick="nextSlide()">
+<img class="upgrade-gold-arrow" src="gold-arrow.png" style="margin-left: calc(var(--s) * 0.175)" draggable="false"/>
+</button>
+
+<div class="upgrade-ui">
+<h2 style="font-size: calc(var(--s) * 1.2); margin-bottom: calc(var(--s) * 0.3)">
+Upgrade Multiplikator
+</h2>
+<div style="display: flex">
+<button class="upgrade-ui-nav" onclick="changeMultiplierDown()"></button>
+<button class="multiplier-button" id="upgradeMultiplier">x1</button>
+<button class="upgrade-ui-nav" onclick="changeMultiplierUp()"></button>
+</div>
+<p style="
+font-size: calc(var(--s) * 0.7);
+color: #c62828;
+margin-top: calc(var(--s) * 0.3);">
+Multiplikator wird nicht auf limitierte Upgrades oder Ausbildungen angewendet
+</p>
+</div>
+</div>
+
+<div class="window" id="windowTeileLieferant">
+<div style="height: calc(var(--s) * 2)"></div>
+
+<div class="delivery-container">
+<h2 id="deliveryName" style="margin-top: calc(var(--s) * 0.5)">BikeParts GmbH</h2>
+
+<div class="loyal-container">
+<p id="localCustomerStatus">365 Tage bis loyaler Kunde</p>
+</div>
+
+<div style="width: auto; margin-bottom: calc(var(--s) * 0.5)">
+<p>Qualität</p>
+<div class="custom-progress-bar-quality">
+<div class="custom-progress-fill-quality" id="progressFillQuality"></div>
+<div class="percent-container">
+<p class="custom-percent-quality"><span id="qualityLevelPercent">50</span></p>
+</div>
+</div>
+</div>
+
+<div style="width: auto; margin-bottom: calc(var(--s) * 0.5)">
+<p>Kosten</p>
+<div class="custom-progress-bar-cost">
+<div class="custom-progress-fill-cost" id="progressFillCost"></div>
+<div class="percent-container">
+<p class="custom-percent-cost"><span id="costLevelPercent">50</span></p>
+</div>
+</div>
+</div>
+
+<button class="delivery-button" id="changeCustomFill" onclick="changeCustomFill()">
+<span>Neuen Lieferanten suchen</span><br/><span>25K</span>
+</button>
+
+<button class="delivery-button" onclick="gambleDelivery()">
+Teile Lieferant Gamble <span id="gambleCost"></span>
+</button>
+</div>
+</div>
+
+<div class="window" id="windowPrestige">
+<div style="height: calc(var(--s) * 2)"></div>
+
+<div class="prestige-container">
+<div class="prestige-half">
+<p>
+Anzahl Prestige <br />
+<span id="prestigeCount"></span>
+<img class="prestige-green-arrow" src="green-arrow.png" draggable="false"/>
+<span id="newPrestigeCount"></span>
+</p>
+
+<p>
+Multiplikator <br />
+<span id="prestigeMultiplier"></span>
+<span><img class="prestige-green-arrow" src="green-arrow.png" draggable="false"/></span>
+<span id="newPrestigeMultiplier"></span>
+</p>
+
+<p>
+Kosten <br />
+<span id="prestigeCost"></span>
+</p>
+
+<button onclick="buyPrestige()">Nächsten Schritt</button>
+</div>
+<div class="prestige-line"></div>
+<div class="prestige-half"></div>
+</div>
+</div>
+
+<div class="username-popup" id="usernamePopup" style="display: none">
+<div class="username-popup-content">
+<h2 style="margin-bottom: 0.5em !important">Namensgebung</h2>
+<p style="margin: 0.25em !important; margin-bottom: 0.5em !important">
+Gebe deinem Unternehmen einen Namen, dieser dient als Anzeigename im Chat und auf der Rangliste
+</p>
+<input class="username-input" type="text" id="usernameInput" placeholder="Dein Name..." />
+<button class="username-button" id="createButton">Namen auswählen</button>
+<p style="color: #c62828; font-size: calc(var(--base-sie) * 0.7); margin: calc(var(--base-sie) * 0.25)">
+Achte darauf das dein Name keine Sonderzeichen oder Spaces enthält. Sollte die Namensgebung trotzdem
+nicht erfolgen, wird der gewünschte Name bereits verwendetet
+</p>
+</div>
+</div>
+
+<div class="window" id="windowOnline">
+<h2 style="margin-top: 0.65em; margin-bottom: 0.35em">Chat & Mitglieder</h2>
+<div style="display: flex; align-items: center; justify-content: center; width: 100%">
+<div class="chat-container">
+<div class="container-chat">
+<div id="chatBox" class="chat-box"></div>
+<div class="chat-input-container">
+<input
+type="text"
+class="message-input"
+id="messageInput"
+placeholder="Mache diese Konversation besonders..." />
+<div class="send-button" id="sendButton">
+<p class="send-text">Senden</p>
+</div>
+</div>
+</div>
+<div id="containerMember" class="container-member" style="overflow-y: auto">
+<div
+style="width: 100%: height: 100%; display: flex; align-items: center; justify-content: center;">
+<h2>Lädt...</h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="online-container-header">
+<h2 class="button-row-header" style="margin-top: 0.65em; margin-bottom: 0.35em">Rangliste - Geld</h2>
+<h2 class="button-row-header" style="margin-top: 0.65em; margin-bottom: 0.35em">
+Rangliste - Standorte
+</h2>
+</div>
+
+<div class="online-container">
+<div class="button-row-container-rank-coins">
+<div
+style="width: 100%: height: 100%; display: flex; align-items: center; justify-content: center;">
+<h2>Lädt...</h2>
+</div>
+</div>
+
+<div class="button-row-container-rank-prestige-level">
+<div
+style="width: 100%: height: 100%; display: flex; align-items: center; justify-content: center;">
+<h2>Lädt...</h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="window" id="windowEinstellungen">
+<div style="height: calc(var(--s) * 2)"></div>
+
+<div class="settings-div">
+<button class="window-choose-button" onclick="openMenu()">Hauptmenü</button>
+</div>
+
+<div class="settings-div">
+<h2>Sichtbarkeit von Elementen anpassen</h2>
+<div style="display: flex; flex-direction: row">
+<p>Statuslesiten vom Spieler und Arbeitern verbergen</p>
+<button onclick="toggleStateDisplay()">Verbergen</button>
+</div>
+<div style="display: flex; flex-direction: row">
+<p>Die Leisten vom Teilelieferanten in Akzentfarbe anzeigen</p>
+<button onclick="toggleDeliveryColor()">Ein</button>
+</div>
+</div>
+</div>
+
+<script type="module" src="game-server.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
