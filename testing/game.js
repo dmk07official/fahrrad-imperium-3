@@ -165,6 +165,40 @@ startLoading(0);
 startSaveInterval();
 }
 
+
+const scrollElements = document.querySelectorAll('.window, .chat-box');
+const state = new Map();
+
+scrollElements.forEach(el => {
+  state.set(el, { startY: 0, scrollY: 0 });
+  
+  el.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      const s = state.get(el);
+      s.startY = e.touches[0].clientY;
+    }
+  }, { passive: false });
+
+  el.addEventListener('touchmove', e => {
+    if (e.touches.length === 1) {
+      e.preventDefault();
+      const s = state.get(el);
+      const delta = s.startY - e.touches[0].clientY;
+      s.scrollY += delta;
+
+      const maxScroll = el.scrollHeight - el.clientHeight;
+      if (s.scrollY < 0) s.scrollY = 0;
+      if (s.scrollY > maxScroll) s.scrollY = maxScroll;
+
+      el.scrollTop = s.scrollY;
+
+      s.startY = e.touches[0].clientY;
+    }
+  }, { passive: false });
+});
+
+
+
 // Formatierung
 function formatNumber(number) {
 const suffixes = ['', 'K', 'M', 'B', 'T', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az'];

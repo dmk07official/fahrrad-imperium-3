@@ -74,7 +74,7 @@ select,option{
 -ms-user-select: none;
 user-select: none;
 touch-action: none;
-touch-action: pan-y;
+overscroll-behavior: none;
 }
 
 @media (max-width: 359px){
