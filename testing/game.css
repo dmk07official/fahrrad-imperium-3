@@ -5,22 +5,22 @@ margin: 0
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden; /* scroll kill */
+  height: 100dvh;
+  width: 100dvw;
+  overflow: hidden;
   background-color: purple;
 }
 
 body {
-  /* Safe Area oben & unten abziehen */
-  height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
 }
+
 
 .window {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0; /* top:0; left:0; right:0; bottom:0 */
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -32,6 +32,7 @@ body {
   opacity: 0;
   box-sizing: border-box;
 }
+
 
 
 
