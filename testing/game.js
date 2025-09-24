@@ -5,8 +5,7 @@
     velocity: 0,
     isTouching: false,
     lastTime: 0,
-    raf: null,
-    moved: false
+    raf: null
   };
 
   function startDrag(win, y) {
@@ -15,11 +14,12 @@
     state.lastY = y;
     state.lastTime = Date.now();
     state.velocity = 0;
-    state.moved = false;
+
     if (state.raf) {
       cancelAnimationFrame(state.raf);
       state.raf = null;
     }
+    state.raf = requestAnimationFrame(update);
   }
 
   function stopDrag() {
@@ -30,12 +30,14 @@
   function update() {
     if (!state.win) return;
 
+    const maxScroll = Math.max(0, state.win.scrollHeight - state.win.clientHeight);
+
     if (!state.isTouching) {
       state.win.scrollTop += state.velocity;
-      state.velocity *= 0.975;
-      if (Math.abs(state.velocity) < 0.02) state.velocity = 0;
+      state.velocity *= 0.95; // Momentum-Dämpfung
 
-      const maxScroll = state.win.scrollHeight - state.win.clientHeight;
+      if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
+
       if (state.win.scrollTop < 0) {
         state.win.scrollTop = 0;
         state.velocity = 0;
@@ -48,10 +50,8 @@
     if (state.velocity !== 0 || state.isTouching) {
       state.raf = requestAnimationFrame(update);
     } else {
-      if (state.raf) {
-        cancelAnimationFrame(state.raf);
-        state.raf = null;
-      }
+      cancelAnimationFrame(state.raf);
+      state.raf = null;
       state.win = null;
     }
   }
@@ -64,39 +64,28 @@
     if (!win) return;
 
     startDrag(win, t.clientY);
-    if (!state.raf) state.raf = requestAnimationFrame(update);
-  }, { passive: true }); // kein preventDefault -> Buttons gehen
+  }, { passive: true });
 
   document.addEventListener('touchmove', (e) => {
     if (!state.win || !state.isTouching) return;
     const t = e.touches[0];
     if (!t) return;
+
     const currentY = t.clientY;
     const dy = state.lastY - currentY;
-    const dt = Math.max(1, Date.now() - state.lastTime);
-
-    if (Math.abs(currentY - state.lastY) > 2) state.moved = true;
 
     state.win.scrollTop += dy;
+    const dt = Math.max(1, Date.now() - state.lastTime);
     state.velocity = (dy / dt) * 16;
 
     state.lastY = currentY;
     state.lastTime = Date.now();
 
-    if (state.moved) e.preventDefault(); // nur wenn Bewegung -> Scrollblock verhindern
-
-    if (!state.raf) state.raf = requestAnimationFrame(update);
+    e.preventDefault(); // Immer verhindern, dass die Seite selbst scrollt
   }, { passive: false });
 
-  document.addEventListener('touchend', () => {
-    if (!state.win) return;
-    stopDrag();
-  });
-
-  document.addEventListener('touchcancel', () => {
-    if (!state.win) return;
-    stopDrag();
-  });
+  document.addEventListener('touchend', stopDrag);
+  document.addEventListener('touchcancel', stopDrag);
 })();
 
 
