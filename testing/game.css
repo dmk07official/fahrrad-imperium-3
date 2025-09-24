@@ -7,12 +7,12 @@ html, body {
   padding:0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+
 }
 body {
   display: flex;
   flex-direction: column;
-  background: #000;
+  background: #222;
 }
 body {
   height: 100vh;
