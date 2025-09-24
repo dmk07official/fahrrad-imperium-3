@@ -1,27 +1,8 @@
-// Alle windows auswählen
 const windows = document.querySelectorAll('.window');
 
 windows.forEach(win => {
-    let isScrolling = false;
-
-    win.addEventListener('wheel', e => {
-        e.preventDefault(); // sonst scrollt der Browser selber
-        if (isScrolling) return;
-
-        const scrollAmount = e.deltaY; // wie viel scrollen wir wollen
-        const maxScroll = win.scrollHeight - win.clientHeight; // das is die max scrollhöhe
-
-        let newScroll = win.scrollTop + scrollAmount;
-
-        // clamp, damit wir nicht drüber scrollen
-        if (newScroll < 0) newScroll = 0;
-        if (newScroll > maxScroll) newScroll = maxScroll;
-
-        win.scrollTop = newScroll;
-    }, { passive: false });
-
-    // optional: touch support für mobile
     let startY = 0;
+
     win.addEventListener('touchstart', e => {
         startY = e.touches[0].clientY;
     }, { passive: true });
@@ -40,7 +21,6 @@ windows.forEach(win => {
         win.scrollTop = newScroll;
     }, { passive: false });
 });
-
 
 
 //Speichern, Laden, Variablen
