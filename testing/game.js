@@ -1,77 +1,116 @@
-document.querySelectorAll('.window').forEach(win => {
-  let startY = 0;
-  let scrollY = 0;
-  let velocity = 0;
-  let isTouching = false;
-  let lastY = 0;
-  let lastTime = 0;
-  let raf;
+(() => {
+  const state = {
+    win: null,
+    startY: 0,
+    lastY: 0,
+    scrollY: 0,
+    velocity: 0,
+    isTouching: false,
+    lastTime: 0,
+    raf: null
+  };
 
-  function update() {
-    if (!isTouching) {
-      scrollY += velocity;
-
-      // Reibung sanfter machen für smooth feeling
-      velocity *= 0.975;
-      if (Math.abs(velocity) < 0.01) velocity = 0;
-
-      // Grenzen checken (inkl. padding bottom)
-      const maxScroll = win.scrollHeight - win.clientHeight;
-      if (scrollY < 0) {
-        scrollY = 0;
-        velocity = 0;
-      }
-      if (scrollY > maxScroll) {
-        scrollY = maxScroll;
-        velocity = 0;
-      }
-    }
-
-    win.scrollTop = scrollY;
-
-    if (velocity !== 0 || isTouching) {
-      raf = requestAnimationFrame(update);
-    } else {
-      cancelAnimationFrame(raf);
-      raf = null;
+  function startDrag(win, y) {
+    if (!win) return;
+    state.win = win;
+    state.isTouching = true;
+    state.startY = y;
+    state.lastY = y;
+    state.lastTime = Date.now();
+    state.velocity = 0;
+    state.scrollY = win.scrollTop;
+    if (state.raf) {
+      cancelAnimationFrame(state.raf);
+      state.raf = null;
     }
   }
 
-  win.addEventListener('touchstart', e => {
-    isTouching = true;
-    cancelAnimationFrame(raf);
-    raf = null;
-    startY = e.touches[0].clientY;
-    lastY = startY;
-    lastTime = Date.now();
-    velocity = 0;
-    scrollY = win.scrollTop;
+  function stopDrag() {
+    state.isTouching = false;
+    if (!state.raf) state.raf = requestAnimationFrame(update);
+  }
+
+  function update() {
+    if (!state.win) return;
+
+    if (!state.isTouching) {
+      state.scrollY += state.velocity;
+      state.velocity *= 0.975;
+      if (Math.abs(state.velocity) < 0.02) state.velocity = 0;
+
+      const maxScroll = Math.max(0, state.win.scrollHeight - state.win.clientHeight);
+      if (state.scrollY < 0) {
+        state.scrollY = 0;
+        state.velocity = 0;
+      } else if (state.scrollY > maxScroll) {
+        state.scrollY = maxScroll;
+        state.velocity = 0;
+      }
+    }
+
+    state.win.scrollTop = state.scrollY;
+
+    if (state.velocity !== 0 || state.isTouching) {
+      state.raf = requestAnimationFrame(update);
+    } else {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = null;
+      }
+      state.win = null;
+    }
+  }
+
+  document.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    if (!t) return;
+    const target = document.elementFromPoint(t.clientX, t.clientY);
+    const win = target ? target.closest('.window') : null;
+    if (!win) return;
+
+    const rect = win.getBoundingClientRect();
+    if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
+
+    startDrag(win, t.clientY);
+    e.preventDefault();
+    if (!state.raf) state.raf = requestAnimationFrame(update);
+  }, { passive: false });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!state.win || !state.isTouching) return;
+    const t = e.touches[0];
+    if (!t) return;
+    const currentY = t.clientY;
+    const dy = state.lastY - currentY;
+    const dt = Math.max(1, Date.now() - state.lastTime);
+    state.scrollY += dy;
+
+    const maxScroll = Math.max(0, state.win.scrollHeight - state.win.clientHeight);
+    if (state.scrollY < 0) state.scrollY = 0;
+    if (state.scrollY > maxScroll) state.scrollY = maxScroll;
+
+    state.win.scrollTop = state.scrollY;
+    state.velocity = (dy / dt) * 16;
+
+    state.lastY = currentY;
+    state.lastTime = Date.now();
+
+    if (!state.raf) state.raf = requestAnimationFrame(update);
+    e.preventDefault();
+  }, { passive: false });
+
+  document.addEventListener('touchend', () => {
+    if (!state.win) return;
+    stopDrag();
   });
 
-  win.addEventListener('touchmove', e => {
-    let currentY = e.touches[0].clientY;
-    let dy = lastY - currentY;
-    let dt = Date.now() - lastTime;
-
-    // dt sichern, kein Divide by 0
-    let safeDt = Math.max(dt, 1);
-
-    scrollY += dy;
-    win.scrollTop = scrollY;
-
-    velocity = (dy / safeDt) * 16; // Geschwindigkeit auf ~60fps skaliert
-
-    lastY = currentY;
-    lastTime = Date.now();
-
-    if (!raf) raf = requestAnimationFrame(update);
+  document.addEventListener('touchcancel', () => {
+    if (!state.win) return;
+    stopDrag();
   });
 
-  win.addEventListener('touchend', () => {
-    isTouching = false;
-    if (!raf) raf = requestAnimationFrame(update);
-  });
-});
+})();
+
 
 //Speichern, Laden, Variablen
 let coins = 0;
