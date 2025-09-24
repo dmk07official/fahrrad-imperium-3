@@ -1,127 +1,46 @@
-(() => {
-  const stateMap = new WeakMap(); // Jeder Window kriegt seinen eigenen State
+// Alle windows auswählen
+const windows = document.querySelectorAll('.window');
 
-  function startDrag(win, y) {
-    let state = stateMap.get(win);
-    if (!state) {
-      state = {
-        lastY: 0,
-        velocity: 0,
-        isTouching: false,
-        lastTime: 0,
-        raf: null
-      };
-      stateMap.set(win, state);
-    }
+windows.forEach(win => {
+    let isScrolling = false;
 
-    state.isTouching = true;
-    state.lastY = y;
-    state.lastTime = Date.now();
-    state.velocity = 0;
+    win.addEventListener('wheel', e => {
+        e.preventDefault(); // sonst scrollt der Browser selber
+        if (isScrolling) return;
 
-    if (state.raf) {
-      cancelAnimationFrame(state.raf);
-      state.raf = null;
-    }
+        const scrollAmount = e.deltaY; // wie viel scrollen wir wollen
+        const maxScroll = win.scrollHeight - win.clientHeight; // das is die max scrollhöhe
 
-    function update() {
-      // Use 100dvh für Höhe, mobile safe
-      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      const maxScroll = Math.max(0, win.scrollHeight - viewportHeight);
+        let newScroll = win.scrollTop + scrollAmount;
 
-      if (!state.isTouching) {
-        win.scrollTop += state.velocity;
-        state.velocity *= 0.95; // Momentum Dämpfung
+        // clamp, damit wir nicht drüber scrollen
+        if (newScroll < 0) newScroll = 0;
+        if (newScroll > maxScroll) newScroll = maxScroll;
 
-        if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
+        win.scrollTop = newScroll;
+    }, { passive: false });
 
-        // Boundaries
-        if (win.scrollTop < 0) {
-          win.scrollTop = 0;
-          state.velocity = 0;
-        } else if (win.scrollTop > maxScroll) {
-          win.scrollTop = maxScroll;
-          state.velocity = 0;
-        }
-      }
+    // optional: touch support für mobile
+    let startY = 0;
+    win.addEventListener('touchstart', e => {
+        startY = e.touches[0].clientY;
+    }, { passive: true });
 
-      if (state.velocity !== 0 || state.isTouching) {
-        state.raf = requestAnimationFrame(update);
-      } else {
-        cancelAnimationFrame(state.raf);
-        state.raf = null;
-      }
-    }
+    win.addEventListener('touchmove', e => {
+        e.preventDefault(); // sonst scrollt der body
+        const deltaY = startY - e.touches[0].clientY;
+        startY = e.touches[0].clientY;
 
-    state.raf = requestAnimationFrame(update);
-  }
+        const maxScroll = win.scrollHeight - win.clientHeight;
+        let newScroll = win.scrollTop + deltaY;
 
-  function stopDrag(win) {
-    const state = stateMap.get(win);
-    if (!state) return;
-    state.isTouching = false;
-    if (!state.raf) state.raf = requestAnimationFrame(() => startDrag(win, 0));
-  }
+        if (newScroll < 0) newScroll = 0;
+        if (newScroll > maxScroll) newScroll = maxScroll;
 
-  document.addEventListener('touchstart', (e) => {
-    const t = e.touches[0];
-    if (!t) return;
-    const target = document.elementFromPoint(t.clientX, t.clientY);
-    const win = target ? target.closest('.window') : null;
-    if (!win) return;
+        win.scrollTop = newScroll;
+    }, { passive: false });
+});
 
-    startDrag(win, t.clientY);
-  }, { passive: true });
-
-  document.addEventListener('touchmove', (e) => {
-    const t = e.touches[0];
-    if (!t) return;
-    const target = document.elementFromPoint(t.clientX, t.clientY);
-    const win = target ? target.closest('.window') : null;
-    if (!win) return;
-
-    const state = stateMap.get(win);
-    if (!state || !state.isTouching) return;
-
-    const currentY = t.clientY;
-    const dy = state.lastY - currentY;
-
-    // Scroll Top mit 100dvh Boundaries
-    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    const maxScroll = Math.max(0, win.scrollHeight - viewportHeight);
-
-    win.scrollTop = Math.min(Math.max(0, win.scrollTop + dy), maxScroll);
-
-    const dt = Math.max(1, Date.now() - state.lastTime);
-    state.velocity = (dy / dt) * 16;
-
-    state.lastY = currentY;
-    state.lastTime = Date.now();
-
-    e.preventDefault(); // Verhindert natives Scrollen
-  }, { passive: false });
-
-  document.addEventListener('touchend', (e) => {
-    const t = e.changedTouches[0];
-    if (!t) return;
-    const target = document.elementFromPoint(t.clientX, t.clientY);
-    const win = target ? target.closest('.window') : null;
-    if (!win) return;
-
-    stopDrag(win);
-  });
-
-  document.addEventListener('touchcancel', (e) => {
-    const t = e.changedTouches[0];
-    if (!t) return;
-    const target = document.elementFromPoint(t.clientX, t.clientY);
-    const win = target ? target.closest('.window') : null;
-    if (!win) return;
-
-    stopDrag(win);
-  });
-
-})();
 
 
 //Speichern, Laden, Variablen
