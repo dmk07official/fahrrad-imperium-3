@@ -25,33 +25,33 @@
     }
 
     function update() {
-      const maxScroll = Math.max(0, win.scrollHeight - win.clientHeight);
+  // Hol den aktuellen Viewport Height, nicht nur clientHeight
+  const viewportHeight = window.visualViewport ? window.visualViewport.height : win.clientHeight;
+  const maxScroll = Math.max(0, win.scrollHeight - viewportHeight);
 
-      if (!state.isTouching) {
-        win.scrollTop += state.velocity;
-        state.velocity *= 0.95; // Momentum Dämpfung
+  if (!state.isTouching) {
+    win.scrollTop += state.velocity;
+    state.velocity *= 0.95; // Momentum Dämpfung
 
-        if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
+    if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
 
-        if (win.scrollTop < 0) {
-          win.scrollTop = 0;
-          state.velocity = 0;
-        } else if (win.scrollTop > maxScroll) {
-          win.scrollTop = maxScroll;
-          state.velocity = 0;
-        }
-      }
-
-      if (state.velocity !== 0 || state.isTouching) {
-        state.raf = requestAnimationFrame(update);
-      } else {
-        cancelAnimationFrame(state.raf);
-        state.raf = null;
-      }
+    if (win.scrollTop < 0) {
+      win.scrollTop = 0;
+      state.velocity = 0;
+    } else if (win.scrollTop > maxScroll) {
+      win.scrollTop = maxScroll;
+      state.velocity = 0;
     }
-
-    state.raf = requestAnimationFrame(update);
   }
+
+  if (state.velocity !== 0 || state.isTouching) {
+    state.raf = requestAnimationFrame(update);
+  } else {
+    cancelAnimationFrame(state.raf);
+    state.raf = null;
+  }
+}
+
 
   function stopDrag(win) {
     const state = stateMap.get(win);
