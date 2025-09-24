@@ -1,3 +1,116 @@
+(() => {
+  const state = {
+    win: null,
+    startY: 0,
+    lastY: 0,
+    scrollY: 0,
+    velocity: 0,
+    isTouching: false,
+    lastTime: 0,
+    raf: null,
+    moved: false
+  };
+
+  function startDrag(win, y) {
+    state.win = win;
+    state.isTouching = true;
+    state.startY = y;
+    state.lastY = y;
+    state.lastTime = Date.now();
+    state.velocity = 0;
+    state.scrollY = win.scrollTop;
+    state.moved = false;
+    if (state.raf) {
+      cancelAnimationFrame(state.raf);
+      state.raf = null;
+    }
+  }
+
+  function stopDrag() {
+    state.isTouching = false;
+    if (!state.raf) state.raf = requestAnimationFrame(update);
+  }
+
+  function update() {
+    if (!state.win) return;
+
+    if (!state.isTouching) {
+      state.scrollY += state.velocity;
+      state.velocity *= 0.975;
+      if (Math.abs(state.velocity) < 0.02) state.velocity = 0;
+
+      const maxScroll = Math.max(0, state.win.scrollHeight - state.win.clientHeight);
+      if (state.scrollY < 0) {
+        state.scrollY = 0;
+        state.velocity = 0;
+      } else if (state.scrollY > maxScroll) {
+        state.scrollY = maxScroll;
+        state.velocity = 0;
+      }
+    }
+
+    state.win.scrollTop = state.scrollY;
+
+    if (state.velocity !== 0 || state.isTouching) {
+      state.raf = requestAnimationFrame(update);
+    } else {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = null;
+      }
+      state.win = null;
+    }
+  }
+
+  document.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    if (!t) return;
+    const target = document.elementFromPoint(t.clientX, t.clientY);
+    const win = target ? target.closest('.window') : null;
+    if (!win) return;
+
+    startDrag(win, t.clientY);
+    if (!state.raf) state.raf = requestAnimationFrame(update);
+  }, { passive: true }); // kein preventDefault hier!
+
+  document.addEventListener('touchmove', (e) => {
+    if (!state.win || !state.isTouching) return;
+    const t = e.touches[0];
+    if (!t) return;
+    const currentY = t.clientY;
+    const dy = state.lastY - currentY;
+    const dt = Math.max(1, Date.now() - state.lastTime);
+
+    if (Math.abs(currentY - state.startY) > 5) state.moved = true;
+
+    state.scrollY += dy;
+    const maxScroll = Math.max(0, state.win.scrollHeight - state.win.clientHeight);
+    if (state.scrollY < 0) state.scrollY = 0;
+    if (state.scrollY > maxScroll) state.scrollY = maxScroll;
+
+    state.win.scrollTop = state.scrollY;
+    state.velocity = (dy / dt) * 16;
+
+    state.lastY = currentY;
+    state.lastTime = Date.now();
+
+    // Nur wenn wirklich bewegt wird -> Default killen (sonst Klicks safe)
+    if (state.moved) e.preventDefault();
+
+    if (!state.raf) state.raf = requestAnimationFrame(update);
+  }, { passive: false });
+
+  document.addEventListener('touchend', () => {
+    if (!state.win) return;
+    stopDrag();
+  });
+
+  document.addEventListener('touchcancel', () => {
+    if (!state.win) return;
+    stopDrag();
+  });
+
+})();
 
 //Speichern, Laden, Variablen
 let coins = 0;
