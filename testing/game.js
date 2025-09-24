@@ -1,15 +1,19 @@
 (() => {
-  const state = {
-    win: null,
-    lastY: 0,
-    velocity: 0,
-    isTouching: false,
-    lastTime: 0,
-    raf: null
-  };
+  const stateMap = new WeakMap(); // Jeder Window kriegt seinen eigenen State
 
   function startDrag(win, y) {
-    state.win = win;
+    let state = stateMap.get(win);
+    if (!state) {
+      state = {
+        lastY: 0,
+        velocity: 0,
+        isTouching: false,
+        lastTime: 0,
+        raf: null
+      };
+      stateMap.set(win, state);
+    }
+
     state.isTouching = true;
     state.lastY = y;
     state.lastTime = Date.now();
@@ -19,41 +23,41 @@
       cancelAnimationFrame(state.raf);
       state.raf = null;
     }
-    state.raf = requestAnimationFrame(update);
-  }
 
-  function stopDrag() {
-    state.isTouching = false;
-    if (!state.raf) state.raf = requestAnimationFrame(update);
-  }
+    function update() {
+      const maxScroll = Math.max(0, win.scrollHeight - win.clientHeight);
 
-  function update() {
-    if (!state.win) return;
+      if (!state.isTouching) {
+        win.scrollTop += state.velocity;
+        state.velocity *= 0.95; // Momentum Dämpfung
 
-    const maxScroll = Math.max(0, state.win.scrollHeight - state.win.clientHeight);
+        if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
 
-    if (!state.isTouching) {
-      state.win.scrollTop += state.velocity;
-      state.velocity *= 0.95; // Momentum-Dämpfung
+        if (win.scrollTop < 0) {
+          win.scrollTop = 0;
+          state.velocity = 0;
+        } else if (win.scrollTop > maxScroll) {
+          win.scrollTop = maxScroll;
+          state.velocity = 0;
+        }
+      }
 
-      if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
-
-      if (state.win.scrollTop < 0) {
-        state.win.scrollTop = 0;
-        state.velocity = 0;
-      } else if (state.win.scrollTop > maxScroll) {
-        state.win.scrollTop = maxScroll;
-        state.velocity = 0;
+      if (state.velocity !== 0 || state.isTouching) {
+        state.raf = requestAnimationFrame(update);
+      } else {
+        cancelAnimationFrame(state.raf);
+        state.raf = null;
       }
     }
 
-    if (state.velocity !== 0 || state.isTouching) {
-      state.raf = requestAnimationFrame(update);
-    } else {
-      cancelAnimationFrame(state.raf);
-      state.raf = null;
-      state.win = null;
-    }
+    state.raf = requestAnimationFrame(update);
+  }
+
+  function stopDrag(win) {
+    const state = stateMap.get(win);
+    if (!state) return;
+    state.isTouching = false;
+    if (!state.raf) state.raf = requestAnimationFrame(() => startDrag(win, 0));
   }
 
   document.addEventListener('touchstart', (e) => {
@@ -67,27 +71,49 @@
   }, { passive: true });
 
   document.addEventListener('touchmove', (e) => {
-    if (!state.win || !state.isTouching) return;
     const t = e.touches[0];
     if (!t) return;
+    const target = document.elementFromPoint(t.clientX, t.clientY);
+    const win = target ? target.closest('.window') : null;
+    if (!win) return;
+
+    const state = stateMap.get(win);
+    if (!state || !state.isTouching) return;
 
     const currentY = t.clientY;
     const dy = state.lastY - currentY;
 
-    state.win.scrollTop += dy;
+    win.scrollTop += dy;
+
     const dt = Math.max(1, Date.now() - state.lastTime);
     state.velocity = (dy / dt) * 16;
 
     state.lastY = currentY;
     state.lastTime = Date.now();
 
-    e.preventDefault(); // Immer verhindern, dass die Seite selbst scrollt
+    e.preventDefault(); // Verhindert natives Scrollen
   }, { passive: false });
 
-  document.addEventListener('touchend', stopDrag);
-  document.addEventListener('touchcancel', stopDrag);
-})();
+  document.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const target = document.elementFromPoint(t.clientX, t.clientY);
+    const win = target ? target.closest('.window') : null;
+    if (!win) return;
 
+    stopDrag(win);
+  });
+  document.addEventListener('touchcancel', (e) => {
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const target = document.elementFromPoint(t.clientX, t.clientY);
+    const win = target ? target.closest('.window') : null;
+    if (!win) return;
+
+    stopDrag(win);
+  });
+
+})();
 
 //Speichern, Laden, Variablen
 let coins = 0;
