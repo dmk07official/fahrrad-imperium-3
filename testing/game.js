@@ -544,15 +544,11 @@ if (clickedButton) {
   clickedButton.classList.add('active');
 }
 document.querySelectorAll('.window').forEach(div => {
-  div.style.opacity = '0';
-  div.style.width = '0';
-  div.style.height = '0';
+  div.style.display = 'none';
 });
 const correspondingDiv = document.getElementById('window' + buttonId.charAt(0).toUpperCase() + buttonId.slice(1));
 if (correspondingDiv) {
-  correspondingDiv.style.opacity = '1';
-  correspondingDiv.style.width = '100%';
-  correspondingDiv.style.minHeight = '100vh';
+  correspondingDiv.style.display = 'block';
 }
 }
 
