@@ -1,24 +1,37 @@
-body{
-margin: 0;
-padding: 0;
-box-sizing: border-box
-}
-body {
-text-align: center;
-background-color: #333
-}
+
 p, h1, h2{
 margin: 0
 }
-body{
-position: absolute;
-top: 0;
-left: 0;
-background-color: purple;
-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-width: 100vw;
-ofervlow: none
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* scroll kill */
+  background-color: purple;
 }
+
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.window {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: url('window-bg.png'),
+              linear-gradient(to bottom, color-mix(in srgb, var(--c) 50%, #000 50%) -5%, #000 7.5%);
+  background-repeat: repeat;
+  background-size: calc(var(--s) * 6) auto;
+  background-attachment: local;
+  opacity: 0;
+  box-sizing: border-box;
+}
+
 
 /* Window Choose */
 .window-choose{
@@ -135,22 +148,6 @@ animation: blinkOpacity 1.5s infinite
 }
 
 /* Window */
-.window{
-width: 0;
-height: 100vh;
-background-color: #000;
-overflow: none;
-box-sizing: border-box;
-opacity: 0;
-position: absolute;
-inset: 0;
-background: 
-url('window-bg.png'),
-linear-gradient(to bottom,color-mix(in srgb, var(--c) 50%, #000 50%) -5%, #000 7.5%);
-background-repeat: repeat;
-background-size: calc(var(--s) * 6) auto;
-background-attachment: local
-}
 
 /* Workshop */
 #workers,
