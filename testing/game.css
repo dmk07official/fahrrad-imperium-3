@@ -12,7 +12,7 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
-  background: var(--c);
+  background: #000;
 }
 body {
   height: 100vh;
