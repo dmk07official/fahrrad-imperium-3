@@ -10,20 +10,37 @@ document.querySelectorAll('.window').forEach(win => {
   function update() {
     if (!isTouching) {
       scrollY += velocity;
-      velocity *= 0.95; // Reibung
-      if (Math.abs(velocity) < 0.1) velocity = 0;
+
+      // Reibung sanfter machen für smooth feeling
+      velocity *= 0.975;
+      if (Math.abs(velocity) < 0.01) velocity = 0;
+
+      // Grenzen checken (inkl. padding bottom)
+      const maxScroll = win.scrollHeight - win.clientHeight;
+      if (scrollY < 0) {
+        scrollY = 0;
+        velocity = 0;
+      }
+      if (scrollY > maxScroll) {
+        scrollY = maxScroll;
+        velocity = 0;
+      }
     }
+
     win.scrollTop = scrollY;
+
     if (velocity !== 0 || isTouching) {
       raf = requestAnimationFrame(update);
     } else {
       cancelAnimationFrame(raf);
+      raf = null;
     }
   }
 
   win.addEventListener('touchstart', e => {
     isTouching = true;
     cancelAnimationFrame(raf);
+    raf = null;
     startY = e.touches[0].clientY;
     lastY = startY;
     lastTime = Date.now();
@@ -36,10 +53,13 @@ document.querySelectorAll('.window').forEach(win => {
     let dy = lastY - currentY;
     let dt = Date.now() - lastTime;
 
+    // dt sichern, kein Divide by 0
+    let safeDt = Math.max(dt, 1);
+
     scrollY += dy;
     win.scrollTop = scrollY;
 
-    velocity = dy / dt * 16; // Geschwindigkeit anpassen auf 60fps
+    velocity = (dy / safeDt) * 16; // Geschwindigkeit auf ~60fps skaliert
 
     lastY = currentY;
     lastTime = Date.now();
@@ -52,8 +72,6 @@ document.querySelectorAll('.window').forEach(win => {
     if (!raf) raf = requestAnimationFrame(update);
   });
 });
-
-
 
 //Speichern, Laden, Variablen
 let coins = 0;
