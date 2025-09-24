@@ -1,21 +1,17 @@
 const windows = document.querySelectorAll('.window');
 
 function getBodyHeight() {
-    return document.body.getBoundingClientRect().height; 
+    return document.body.getBoundingClientRect().height; // 100dvh
 }
 
 windows.forEach(win => {
     let startY = 0;
 
     function getMaxScroll() {
-        const style = getComputedStyle(win);
-        const paddingTop = parseFloat(style.paddingTop);
-        const paddingBottom = parseFloat(style.paddingBottom);
+        const contentHeight = win.scrollHeight; // gesamter Inhalt inkl padding
+        const visibleHeight = getBodyHeight();  // Body = 100dvh
 
-        const contentHeight = win.scrollHeight; // gesamter Inhalt inkl. padding
-        const visibleHeight = getBodyHeight();
-
-        return contentHeight - visibleHeight;
+        return Math.max(contentHeight - visibleHeight, 0); // nie < 0
     }
 
     win.addEventListener('touchstart', e => {
@@ -27,9 +23,7 @@ windows.forEach(win => {
         const deltaY = startY - e.touches[0].clientY;
         startY = e.touches[0].clientY;
 
-        let maxScroll = getMaxScroll();
-        if (maxScroll < 0) maxScroll = 0;
-
+        const maxScroll = getMaxScroll();
         let newScroll = win.scrollTop + deltaY;
 
         if (newScroll < 0) newScroll = 0;
@@ -38,8 +32,6 @@ windows.forEach(win => {
         win.scrollTop = newScroll;
     }, { passive: false });
 });
-
-
 
 //Speichern, Laden, Variablen
 let coins = 0;
