@@ -1,18 +1,37 @@
+// 100dvh in px berechnen
+function getDvhPx() {
+    return window.innerHeight * 1; // innerHeight = 100dvh
+}
+
 const windows = document.querySelectorAll('.window');
 
 windows.forEach(win => {
     let startY = 0;
+
+    // Padding und Height berücksichtigen
+    function getMaxScroll() {
+        const style = getComputedStyle(win);
+        const paddingTop = parseFloat(style.paddingTop);
+        const paddingBottom = parseFloat(style.paddingBottom);
+
+        const contentHeight = win.scrollHeight; // gesamter Inhalt inkl padding
+        const visibleHeight = getDvhPx() - paddingTop - paddingBottom;
+
+        return contentHeight - visibleHeight;
+    }
 
     win.addEventListener('touchstart', e => {
         startY = e.touches[0].clientY;
     }, { passive: true });
 
     win.addEventListener('touchmove', e => {
-        e.preventDefault(); // sonst scrollt der body
+        e.preventDefault();
         const deltaY = startY - e.touches[0].clientY;
         startY = e.touches[0].clientY;
 
-        const maxScroll = win.scrollHeight - win.clientHeight;
+        let maxScroll = getMaxScroll();
+        if (maxScroll < 0) maxScroll = 0;
+
         let newScroll = win.scrollTop + deltaY;
 
         if (newScroll < 0) newScroll = 0;
