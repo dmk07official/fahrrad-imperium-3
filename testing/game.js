@@ -69,7 +69,8 @@
     if (!win) return;
 
     const rect = win.getBoundingClientRect();
-    if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
+    // FIX: Nur komplett außerhalb blocken, nicht halber Screen
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
 
     startDrag(win, t.clientY);
     e.preventDefault();
@@ -110,7 +111,6 @@
   });
 
 })();
-
 
 //Speichern, Laden, Variablen
 let coins = 0;
