@@ -18,6 +18,7 @@ background-color: red;
 }
 body{
 background-color: blue;
+max-height: 100vh !important;
 }
 
 /* Window Choose */
