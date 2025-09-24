@@ -25,33 +25,36 @@
     }
 
     function update() {
-  // Hol den aktuellen Viewport Height, nicht nur clientHeight
-  const viewportHeight = window.visualViewport ? window.visualViewport.height : win.clientHeight;
-  const maxScroll = Math.max(0, win.scrollHeight - viewportHeight);
+      // Use 100dvh für Höhe, mobile safe
+      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const maxScroll = Math.max(0, win.scrollHeight - viewportHeight);
 
-  if (!state.isTouching) {
-    win.scrollTop += state.velocity;
-    state.velocity *= 0.95; // Momentum Dämpfung
+      if (!state.isTouching) {
+        win.scrollTop += state.velocity;
+        state.velocity *= 0.95; // Momentum Dämpfung
 
-    if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
+        if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
 
-    if (win.scrollTop < 0) {
-      win.scrollTop = 0;
-      state.velocity = 0;
-    } else if (win.scrollTop > maxScroll) {
-      win.scrollTop = maxScroll;
-      state.velocity = 0;
+        // Boundaries
+        if (win.scrollTop < 0) {
+          win.scrollTop = 0;
+          state.velocity = 0;
+        } else if (win.scrollTop > maxScroll) {
+          win.scrollTop = maxScroll;
+          state.velocity = 0;
+        }
+      }
+
+      if (state.velocity !== 0 || state.isTouching) {
+        state.raf = requestAnimationFrame(update);
+      } else {
+        cancelAnimationFrame(state.raf);
+        state.raf = null;
+      }
     }
-  }
 
-  if (state.velocity !== 0 || state.isTouching) {
     state.raf = requestAnimationFrame(update);
-  } else {
-    cancelAnimationFrame(state.raf);
-    state.raf = null;
   }
-}
-
 
   function stopDrag(win) {
     const state = stateMap.get(win);
@@ -83,7 +86,11 @@
     const currentY = t.clientY;
     const dy = state.lastY - currentY;
 
-    win.scrollTop += dy;
+    // Scroll Top mit 100dvh Boundaries
+    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    const maxScroll = Math.max(0, win.scrollHeight - viewportHeight);
+
+    win.scrollTop = Math.min(Math.max(0, win.scrollTop + dy), maxScroll);
 
     const dt = Math.max(1, Date.now() - state.lastTime);
     state.velocity = (dy / dt) * 16;
@@ -103,6 +110,7 @@
 
     stopDrag(win);
   });
+
   document.addEventListener('touchcancel', (e) => {
     const t = e.changedTouches[0];
     if (!t) return;
@@ -114,6 +122,7 @@
   });
 
 })();
+
 
 //Speichern, Laden, Variablen
 let coins = 0;
