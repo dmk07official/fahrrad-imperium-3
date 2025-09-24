@@ -17,9 +17,12 @@ html{
 background-color: red;
 }
 body{
+position: absolute;
+top: 0;
+left: 0;
 background-color: blue;
-max-height: 100vh !important;
-z-index: 999999;
+height: 100vh !important;
+width: 100vw !important;
 }
 
 /* Window Choose */
