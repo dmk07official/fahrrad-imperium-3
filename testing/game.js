@@ -1,3 +1,60 @@
+document.querySelectorAll('.window').forEach(win => {
+  let startY = 0;
+  let scrollY = 0;
+  let velocity = 0;
+  let isTouching = false;
+  let lastY = 0;
+  let lastTime = 0;
+  let raf;
+
+  function update() {
+    if (!isTouching) {
+      scrollY += velocity;
+      velocity *= 0.95; // Reibung
+      if (Math.abs(velocity) < 0.1) velocity = 0;
+    }
+    win.scrollTop = scrollY;
+    if (velocity !== 0 || isTouching) {
+      raf = requestAnimationFrame(update);
+    } else {
+      cancelAnimationFrame(raf);
+    }
+  }
+
+  win.addEventListener('touchstart', e => {
+    isTouching = true;
+    cancelAnimationFrame(raf);
+    startY = e.touches[0].clientY;
+    lastY = startY;
+    lastTime = Date.now();
+    velocity = 0;
+    scrollY = win.scrollTop;
+  });
+
+  win.addEventListener('touchmove', e => {
+    let currentY = e.touches[0].clientY;
+    let dy = lastY - currentY;
+    let dt = Date.now() - lastTime;
+
+    scrollY += dy;
+    win.scrollTop = scrollY;
+
+    velocity = dy / dt * 16; // Geschwindigkeit anpassen auf 60fps
+
+    lastY = currentY;
+    lastTime = Date.now();
+
+    if (!raf) raf = requestAnimationFrame(update);
+  });
+
+  win.addEventListener('touchend', () => {
+    isTouching = false;
+    if (!raf) raf = requestAnimationFrame(update);
+  });
+});
+
+
+
 //Speichern, Laden, Variablen
 let coins = 0;
 let prestigeCount = 0, prestigeMultiplier = 1, prestigeCost = 1000;
