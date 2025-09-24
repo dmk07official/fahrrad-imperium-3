@@ -1,15 +1,17 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const windows = document.querySelectorAll('.window');
+document.querySelectorAll('.window').forEach(wrapper => {
 
-  windows.forEach(win => {
-    new BScroll(win, {
-      scrollY: true,
-      click: true,
-      bounce: true,
-      probeType: 3
-    });
-  });
-});
+  const scroll = new BScroll(wrapper, {
+    scrollY: true,
+    click: true,
+    momentum: true,
+    bounce: true
+  })
+
+  wrapper.addEventListener('touchstart', e => scroll.handleStart(e), {passive: false})
+  wrapper.addEventListener('touchmove', e => scroll.handleMove(e), {passive: false})
+  wrapper.addEventListener('touchend', e => scroll.handleEnd(e))
+})
+
 
 //Speichern, Laden, Variablen
 let coins = 0;
