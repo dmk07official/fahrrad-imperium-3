@@ -1,25 +1,15 @@
-const windows = document.querySelectorAll('.window');
+document.addEventListener('DOMContentLoaded', function() {
+  const windows = document.querySelectorAll('.window');
 
-windows.forEach(win => {
-    // wichtig: Window scrollable machen
-    win.style.overflowY = 'auto'; // zwingt Browser zu erkennen, dass scroll geht
-
-    let startY = 0;
-
-    win.addEventListener('touchstart', e => {
-        startY = e.touches[0].clientY;
-    }, { passive: true });
-
-    win.addEventListener('touchmove', e => {
-        e.preventDefault(); // kein default scroll vom Body
-
-        const deltaY = startY - e.touches[0].clientY;
-        startY = e.touches[0].clientY;
-
-        win.scrollTop += deltaY;
-    }, { passive: false });
+  windows.forEach(win => {
+    new BScroll(win, {
+      scrollY: true,
+      click: true,
+      bounce: true,
+      probeType: 3
+    });
+  });
 });
-
 
 //Speichern, Laden, Variablen
 let coins = 0;
