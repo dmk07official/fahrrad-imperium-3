@@ -18,17 +18,16 @@ background-color: green;
 position: absolute;
 top: 0;
 left: 0;
-height: 100vh !important;
-width: 100vw !important;
-z-index: 99999;
+height: 0;
+width: 0;
 }
 body{
 position: absolute;
 top: 0;
 left: 0;
 background-color: blue;
-height: 100vh !important;
-width: 100vw !important;
+height: 0;
+width: 0;
 }
 
 /* Window Choose */
