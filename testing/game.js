@@ -1,37 +1,25 @@
 const windows = document.querySelectorAll('.window');
 
-function getBodyHeight() {
-    return document.body.getBoundingClientRect().height; // 100dvh
-}
-
 windows.forEach(win => {
+    // wichtig: Window scrollable machen
+    win.style.overflowY = 'auto'; // zwingt Browser zu erkennen, dass scroll geht
+
     let startY = 0;
-
-    function getMaxScroll() {
-        const contentHeight = win.scrollHeight; // gesamter Inhalt inkl padding
-        const visibleHeight = getBodyHeight();  // Body = 100dvh
-
-        return Math.max(contentHeight - visibleHeight, 0); // nie < 0
-    }
 
     win.addEventListener('touchstart', e => {
         startY = e.touches[0].clientY;
     }, { passive: true });
 
     win.addEventListener('touchmove', e => {
-        e.preventDefault();
+        e.preventDefault(); // kein default scroll vom Body
+
         const deltaY = startY - e.touches[0].clientY;
         startY = e.touches[0].clientY;
 
-        const maxScroll = getMaxScroll();
-        let newScroll = win.scrollTop + deltaY;
-
-        if (newScroll < 0) newScroll = 0;
-        if (newScroll > maxScroll) newScroll = maxScroll;
-
-        win.scrollTop = newScroll;
+        win.scrollTop += deltaY;
     }, { passive: false });
 });
+
 
 //Speichern, Laden, Variablen
 let coins = 0;
