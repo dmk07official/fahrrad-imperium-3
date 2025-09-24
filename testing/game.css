@@ -21,6 +21,8 @@ body {
 .window {
   flex: 1;
   width: 100%;
+  padding-top: calc(var(--s) * 5);
+  padding-bottom: calc(var(--s) * 5);
   min-height: 100vh;
   display: none;
   overflow-y: auto;
