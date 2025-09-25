@@ -1,16 +1,31 @@
-document.querySelectorAll('.window').forEach(wrapper => {
+if ('ontouchstart' in window) {
+  document.querySelectorAll('.window').forEach(elem => {
+    let startY = 0;
+    let scrollTop = 0;
+    let isTouching = false;
 
-  const scroll = new BScroll(wrapper, {
-    scrollY: true,
-    click: true,
-    momentum: true,
-    bounce: true
-  })
+    elem.addEventListener('touchstart', e => {
+      isTouching = true;
+      startY = e.touches[0].pageY;
+      scrollTop = elem.scrollTop;
+    }, { passive: false });
 
-  wrapper.addEventListener('touchstart', e => scroll.handleStart(e), {passive: false})
-  wrapper.addEventListener('touchmove', e => scroll.handleMove(e), {passive: false})
-  wrapper.addEventListener('touchend', e => scroll.handleEnd(e))
-})
+    elem.addEventListener('touchmove', e => {
+      if (!isTouching) return;
+      e.preventDefault();
+
+      const currentY = e.touches[0].pageY;
+      const deltaY = currentY - startY;
+
+      elem.scrollTop = scrollTop - deltaY;
+    }, { passive: false });
+
+    elem.addEventListener('touchend', () => {
+      isTouching = false;
+    });
+  });
+}
+
 
 
 //Speichern, Laden, Variablen
