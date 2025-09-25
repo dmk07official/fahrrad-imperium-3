@@ -1,30 +1,37 @@
-if ('ontouchstart' in window) {
-  document.querySelectorAll('.window').forEach(elem => {
-    let startY = 0;
-    let scrollTop = 0;
-    let isTouching = false;
+document.querySelectorAll('.window').forEach(elem => {
+  let startY = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let isTouching = false;
 
-    elem.addEventListener('touchstart', e => {
-      isTouching = true;
-      startY = e.touches[0].pageY;
-      scrollTop = elem.scrollTop;
-    }, { passive: false });
+  elem.addEventListener('touchstart', e => {
+    isTouching = true;
+    startY = e.touches[0].pageY;
+    prevTranslate = currentTranslate;
+  }, { passive: false });
 
-    elem.addEventListener('touchmove', e => {
-      if (!isTouching) return;
-      e.preventDefault();
+  elem.addEventListener('touchmove', e => {
+    if (!isTouching) return;
+    e.preventDefault();
 
-      const currentY = e.touches[0].pageY;
-      const deltaY = currentY - startY;
+    const deltaY = e.touches[0].pageY - startY;
+    currentTranslate = prevTranslate + deltaY;
 
-      elem.scrollTop = scrollTop - deltaY;
-    }, { passive: false });
+    // Begrenzung: nicht unendlich nach oben/unten
+    const maxScroll = 0;
+    const minScroll = -(elem.scrollHeight - elem.clientHeight);
 
-    elem.addEventListener('touchend', () => {
-      isTouching = false;
-    });
+    if (currentTranslate > maxScroll) currentTranslate = maxScroll;
+    if (currentTranslate < minScroll) currentTranslate = minScroll;
+
+    elem.style.transform = `translateY(${currentTranslate}px)`;
+  }, { passive: false });
+
+  elem.addEventListener('touchend', () => {
+    isTouching = false;
   });
-}
+});
+
 
 
 
