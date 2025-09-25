@@ -73,7 +73,6 @@ select,option{
 -ms-user-select: none;
 user-select: none;
 touch-action: none;
-overscroll-behavior: none;
 }
 
 @media (max-width: 359px){
