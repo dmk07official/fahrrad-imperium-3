@@ -1,39 +1,92 @@
-document.querySelectorAll('.window').forEach(elem => {
-  let startY = 0;
-  let currentTranslate = 0;
-  let prevTranslate = 0;
-  let isTouching = false;
+(() => {
+  const state = {
+    win: null,
+    lastY: 0,
+    velocity: 0,
+    isTouching: false,
+    lastTime: 0,
+    raf: null
+  };
 
-  elem.addEventListener('touchstart', e => {
-    isTouching = true;
-    startY = e.touches[0].pageY;
-    prevTranslate = currentTranslate;
+  function startDrag(win, y) {
+    state.win = win;
+    state.isTouching = true;
+    state.lastY = y;
+    state.lastTime = Date.now();
+    state.velocity = 0;
+
+    if (state.raf) {
+      cancelAnimationFrame(state.raf);
+      state.raf = null;
+    }
+    state.raf = requestAnimationFrame(update);
+  }
+
+  function stopDrag() {
+    state.isTouching = false;
+    if (!state.raf) state.raf = requestAnimationFrame(update);
+  }
+
+  function update() {
+    if (!state.win) return;
+
+    const maxScroll = Math.max(0, state.win.scrollHeight - state.win.clientHeight);
+
+    if (!state.isTouching) {
+      state.win.scrollTop += state.velocity;
+      state.velocity *= 0.95; // Momentum-Dämpfung
+
+      if (Math.abs(state.velocity) < 0.1) state.velocity = 0;
+
+      if (state.win.scrollTop < 0) {
+        state.win.scrollTop = 0;
+        state.velocity = 0;
+      } else if (state.win.scrollTop > maxScroll) {
+        state.win.scrollTop = maxScroll;
+        state.velocity = 0;
+      }
+    }
+
+    if (state.velocity !== 0 || state.isTouching) {
+      state.raf = requestAnimationFrame(update);
+    } else {
+      cancelAnimationFrame(state.raf);
+      state.raf = null;
+      state.win = null;
+    }
+  }
+
+  document.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    if (!t) return;
+    const target = document.elementFromPoint(t.clientX, t.clientY);
+    const win = target ? target.closest('.window') : null;
+    if (!win) return;
+
+    startDrag(win, t.clientY);
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!state.win || !state.isTouching) return;
+    const t = e.touches[0];
+    if (!t) return;
+
+    const currentY = t.clientY;
+    const dy = state.lastY - currentY;
+
+    state.win.scrollTop += dy;
+    const dt = Math.max(1, Date.now() - state.lastTime);
+    state.velocity = (dy / dt) * 16;
+
+    state.lastY = currentY;
+    state.lastTime = Date.now();
+
+    e.preventDefault(); // Immer verhindern, dass die Seite selbst scrollt
   }, { passive: false });
 
-  elem.addEventListener('touchmove', e => {
-    if (!isTouching) return;
-    e.preventDefault();
-
-    const deltaY = e.touches[0].pageY - startY;
-    currentTranslate = prevTranslate + deltaY;
-
-    // Begrenzung: nicht unendlich nach oben/unten
-    const maxScroll = 0;
-    const minScroll = -(elem.scrollHeight - elem.clientHeight);
-
-    if (currentTranslate > maxScroll) currentTranslate = maxScroll;
-    if (currentTranslate < minScroll) currentTranslate = minScroll;
-
-    elem.style.transform = `translateY(${currentTranslate}px)`;
-  }, { passive: false });
-
-  elem.addEventListener('touchend', () => {
-    isTouching = false;
-  });
-});
-
-
-
+  document.addEventListener('touchend', stopDrag);
+  document.addEventListener('touchcancel', stopDrag);
+})();
 
 //Speichern, Laden, Variablen
 let coins = 0;
