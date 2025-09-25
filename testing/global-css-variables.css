@@ -31,7 +31,6 @@ body{
 color: var(--c);
 text-align: center;
 font-family: "Baloo 2", sans-serif;
-touch-action: manipulation;
 scrollbar-width: none;
 -ms-overflow-style: none;
 -webkit-user-select: none;
