@@ -11,6 +11,7 @@ scroll-behavior: smooth
 body {
 text-align: center;
 background-color: #333
+overflow: hidden;
 }
 p, h1, h2{
 margin: 0
