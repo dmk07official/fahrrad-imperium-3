@@ -73,76 +73,27 @@ overscroll-behavior: none;
 -webkit-touch-callout: none;
 }
 
-@media (max-width: 359px){
-:root{
---s: 5px
-}
-}
-@media (min-width: 360px) and (max-width: 419px){
-:root{
---s: 6px
-}
-}
-@media (min-width: 420px) and (max-width: 479px){
-:root{
---s: 7px
-}
-}
-@media (min-width: 480px) and (max-width: 599px){
-:root {
---s: 8px
-}
-}
-@media (min-width: 600px) and (max-width: 719px){
-:root {
---s: 10px
-}
-}
-@media (min-width: 720px) and (max-width: 899px){
-:root {
---s: 12px
-}
-}
-@media (min-width: 900px) and (max-width: 1079px){
-:root {
---s: 15px
-}
-}
-@media (min-width: 1080px) and (max-width: 1259px){
-:root {
---s: 18px
-}
-}
-@media (min-width: 1260px) and (max-width: 1439px){
-:root {
---s: 22px;
-}
-}
-@media (max-width: 1440px) and (min-width: 1719px){
-:root {
---s: 25px
-}
-}
-@media (max-width: 1720px) and (min-width: 1999px){
-:root {
---s: 28px
-}
-}
-@media (max-width: 2000px) and (min-width: 2279px){
-:root {
---s: 32px
-}
-}
-@media (max-width: 2280px) and (min-width: 2419px){
-:root {
---s: 36px
-}
-}
-@media (min-width: 2420px){
-:root {
---s: 40px
-}
-}
+@media (min-width: 320px) { :root { --s: 5px } }
+@media (min-width: 360px) { :root { --s: 6px } }
+@media (min-width: 400px) { :root { --s: 7px } }
+@media (min-width: 440px) { :root { --s: 8px } }
+@media (min-width: 480px) { :root { --s: 9px } }
+@media (min-width: 540px) { :root { --s: 10px } }
+@media (min-width: 600px) { :root { --s: 11px } }
+@media (min-width: 660px) { :root { --s: 12px } }
+@media (min-width: 720px) { :root { --s: 13px } }
+@media (min-width: 800px) { :root { --s: 14px } }
+@media (min-width: 900px) { :root { --s: 15px } }
+@media (min-width: 1000px) { :root { --s: 16px } }
+@media (min-width: 1100px) { :root { --s: 18px } }
+@media (min-width: 1260px) { :root { --s: 20px } }
+@media (min-width: 1440px) { :root { --s: 22px } }
+@media (min-width: 1600px) { :root { --s: 25px } }
+@media (min-width: 1800px) { :root { --s: 28px } }
+@media (min-width: 2000px) { :root { --s: 32px } }
+@media (min-width: 2200px) { :root { --s: 36px } }
+@media (min-width: 2400px) { :root { --s: 40px } }
+
 
 .blur{
 position: fixed;
