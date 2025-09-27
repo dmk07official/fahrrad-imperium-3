@@ -40,7 +40,7 @@ margin: 0
 
 button {
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.1s ease-in-out;
   transform-origin: center; /* wichtig, damit zentriert bleibt */
 }
 
