@@ -4,6 +4,20 @@ document.querySelectorAll('*').forEach(el => {
     el.addEventListener('click', x);
 });
 
+if (screen.orientation && screen.orientation.lock) {
+    // versuchen Landscape zu sperren
+    screen.orientation.lock('landscape')
+    .then(() => {
+        console.log('Orientation locked to landscape! 🏄‍♂️');
+    })
+    .catch(err => {
+        console.warn('Orientation lock failed:', err);
+    });
+} else {
+    console.warn('Orientation API not supported 😭');
+}
+
+
 //Speichern, Laden, Variablen
 let coins = 0;
 let prestigeCount = 0, prestigeMultiplier = 1, prestigeCost = 1000;
