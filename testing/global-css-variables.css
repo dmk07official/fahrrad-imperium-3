@@ -31,7 +31,6 @@ body{
 color: var(--c);
 text-align: center;
 font-family: "Baloo 2", sans-serif;
-touch-action: manipulation;
 scrollbar-width: none;
 -ms-overflow-style: none;
 -webkit-user-select: none;
@@ -73,6 +72,7 @@ select,option{
 -moz-user-select: none;
 -ms-user-select: none;
 user-select: none;
+touch-action: pan-x pan-y;
 overscroll-behavior: none;
 }
 
