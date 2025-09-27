@@ -6,21 +6,29 @@ document.querySelectorAll('*').forEach(el => {
 
 //Mobile ::active Hack
 document.querySelectorAll("button").forEach(btn => {
+  let timeout;
+
   btn.addEventListener("pointerdown", e => {
-    e.preventDefault(); // nix Browser-Quatsch
+    e.preventDefault();
+    clearTimeout(timeout); // falls einer spamt
     btn.classList.add("shrink");
   });
 
   btn.addEventListener("pointerup", e => {
     e.preventDefault();
-    btn.classList.remove("shrink");
+    // warte bis die Transition Zeit rum is
+    timeout = setTimeout(() => {
+      btn.classList.remove("shrink");
+    }, 200); // 200ms = deine transition-duration
   });
 
   btn.addEventListener("pointerleave", e => {
     e.preventDefault();
+    clearTimeout(timeout);
     btn.classList.remove("shrink");
   });
 });
+
 
 
 
