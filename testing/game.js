@@ -1,12 +1,15 @@
-let lastTouch = 0;
+let lastTap = 0;
 
-document.addEventListener('touchend', function(event) {
-    const now = (new Date()).getTime();
-    if (now - lastTouch <= 300) {
-        event.preventDefault(); // verhindert double-tap zoom
+document.addEventListener('touchend', function(e) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    
+    if (tapLength < 300 && tapLength > 0) {
+        e.preventDefault(); // kill double-tap zoom
     }
-    lastTouch = now;
-}, false);
+    
+    lastTap = currentTime;
+});
 
 
 //Speichern, Laden, Variablen
