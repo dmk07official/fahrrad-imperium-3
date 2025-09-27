@@ -1,3 +1,14 @@
+let lastTouch = 0;
+
+document.addEventListener('touchend', function(event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouch <= 300) {
+        event.preventDefault(); // verhindert double-tap zoom
+    }
+    lastTouch = now;
+}, false);
+
+
 //Speichern, Laden, Variablen
 let coins = 0;
 let prestigeCount = 0, prestigeMultiplier = 1, prestigeCost = 1000;
