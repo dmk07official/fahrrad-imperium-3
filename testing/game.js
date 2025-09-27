@@ -1,25 +1,27 @@
-let lastTap = 0;
+// alle Elemente auf der Seite
+const allElements = document.querySelectorAll('*');
 
-document.addEventListener('touchend', function(e) {
-    const currentTime = Date.now();
-    const tapLength = currentTime - lastTap;
+allElements.forEach(el => {
+    let lastTap = 0;
 
-    if (tapLength < 300 && tapLength > 0) {
-        e.preventDefault(); // kill double-tap zoom
+    el.addEventListener('touchend', function(e) {
+        const currentTime = Date.now();
+        const tapLength = currentTime - lastTap;
 
-        // fake action, tut nix schweres
-        fakeAction(e);
-    }
+        if (tapLength < 300 && tapLength > 0) {
+            e.preventDefault(); // Safari double-tap kill
+            fakeAction(e);
+        }
 
-    lastTap = currentTime;
-}, { passive: false });
+        lastTap = currentTime;
+    }, { passive: false });
+});
 
 function fakeAction(e) {
-    // nichts Großes, nur ein kleiner Fake-Trigger
-    console.log('Fake Tap Action triggered 🥴'); 
-    // optional: kleine Animation oder Dummy-Klasse hinzufügen
-    // e.target.classList.add('fake-tap'); setTimeout(() => e.target.classList.remove('fake-tap'), 100);
+    // super lightweight Fake Action
+    console.log('Fake Tap Action triggered 🥴');
 }
+
 
 
 
