@@ -1,26 +1,11 @@
-// alle Elemente auf der Seite
-const allElements = document.querySelectorAll('*');
+// leichte Dummy-Funktion, zieht quasi 0 Leistung
+function noop(e) {}
 
-allElements.forEach(el => {
-    let lastTap = 0;
-
-    el.addEventListener('touchend', function(e) {
-        const currentTime = Date.now();
-        const tapLength = currentTime - lastTap;
-
-        if (tapLength < 300 && tapLength > 0) {
-            e.preventDefault(); // Safari double-tap kill
-            fakeAction(e);
-        }
-
-        lastTap = currentTime;
-    }, { passive: false });
+// alle Elemente auswählen
+document.querySelectorAll('*').forEach(el => {
+    el.addEventListener('click', noop, { passive: true });
 });
 
-function fakeAction(e) {
-    // super lightweight Fake Action
-    console.log('Fake Tap Action triggered 🥴');
-}
 
 
 
