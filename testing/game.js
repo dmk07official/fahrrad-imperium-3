@@ -23,7 +23,7 @@ document.querySelectorAll("button").forEach(btn => {
     // nur falls noch gedrückt wurde
     if (!btn.classList.contains("shrink")) return;
     // lässt Transition laufen, auch bei kurzen Klicks
-    releaseTimeout = setTimeout(removeShrink, 200); // 200ms = CSS transition
+    releaseTimeout = setTimeout(removeShrink, 75); // 200ms = CSS transition
   };
 
   btn.addEventListener("pointerup", e => {
