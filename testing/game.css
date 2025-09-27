@@ -38,6 +38,15 @@ p, h1, h2{
 margin: 0
 }
 
+button {
+  transition: transform 0.2s ease-in-out;
+  transform-origin: center; /* wichtig, damit zentriert bleibt */
+}
+
+button:active {
+  transform: scale(0.85);
+}
+
 /* Window Choose */
 .window-choose{
 display: flex;
