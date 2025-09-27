@@ -552,7 +552,7 @@ const correspondingDiv = document.getElementById('window' + buttonId.charAt(0).t
 if (correspondingDiv) {
   correspondingDiv.style.opacity = '1';
   correspondingDiv.style.width = '100%';
-  correspondingDiv.style.minHeight = '100vh';
+  correspondingDiv.style.minHeight = '100dvh';
 }
 }
 
