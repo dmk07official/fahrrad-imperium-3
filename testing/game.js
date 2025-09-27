@@ -6,33 +6,43 @@ document.querySelectorAll('*').forEach(el => {
 
 //Mobile ::active Hack
 document.querySelectorAll("button").forEach(btn => {
-  let timeout;
+  let releaseTimeout;
+
+  const removeShrink = () => {
+    btn.classList.remove("shrink");
+    releaseTimeout = null;
+  };
 
   btn.addEventListener("pointerdown", e => {
     e.preventDefault();
-    clearTimeout(timeout); // falls einer spamt
+    if (releaseTimeout) clearTimeout(releaseTimeout); // falls quick click
     btn.classList.add("shrink");
   });
 
+  const handleRelease = () => {
+    // nur falls noch gedrückt wurde
+    if (!btn.classList.contains("shrink")) return;
+    // lässt Transition laufen, auch bei kurzen Klicks
+    releaseTimeout = setTimeout(removeShrink, 200); // 200ms = CSS transition
+  };
+
   btn.addEventListener("pointerup", e => {
     e.preventDefault();
-    // warte bis die Transition Zeit rum is
-    timeout = setTimeout(() => {
-      btn.classList.remove("shrink");
-    }, 100); // 200ms = deine transition-duration
+    handleRelease();
   });
 
   btn.addEventListener("pointerleave", e => {
     e.preventDefault();
-    clearTimeout(timeout);
-    btn.classList.remove("shrink");
+    if (releaseTimeout) clearTimeout(releaseTimeout);
+    removeShrink(); // sofort raus wenn Finger weg
+  });
+
+  btn.addEventListener("pointercancel", e => {
+    e.preventDefault();
+    if (releaseTimeout) clearTimeout(releaseTimeout);
+    removeShrink(); // bei Gesture-Abbruch
   });
 });
-
-
-
-
-
 
 //Speichern, Laden, Variablen
 let coins = 0;
