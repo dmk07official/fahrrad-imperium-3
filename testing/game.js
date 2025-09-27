@@ -17,6 +17,10 @@ if (screen.orientation && screen.orientation.lock) {
     console.warn('Orientation API not supported 😭');
 }
 
+// Damit :active auf iOS zuverlässig ist
+document.addEventListener("touchstart", function(){}, true);
+
+
 
 //Speichern, Laden, Variablen
 let coins = 0;
