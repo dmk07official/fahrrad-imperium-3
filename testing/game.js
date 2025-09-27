@@ -4,21 +4,25 @@ document.querySelectorAll('*').forEach(el => {
     el.addEventListener('click', x);
 });
 
-if (screen.orientation && screen.orientation.lock) {
-    // versuchen Landscape zu sperren
-    screen.orientation.lock('landscape')
-    .then(() => {
-        console.log('Orientation locked to landscape! 🏄‍♂️');
-    })
-    .catch(err => {
-        console.warn('Orientation lock failed:', err);
-    });
-} else {
-    console.warn('Orientation API not supported 😭');
-}
+//Mobile ::active Hack
+document.querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("pointerdown", e => {
+    e.preventDefault(); // nix Browser-Quatsch
+    btn.classList.add("shrink");
+  });
 
-// Damit :active auf iOS zuverlässig ist
-document.addEventListener("touchstart", function(){}, true);
+  btn.addEventListener("pointerup", e => {
+    e.preventDefault();
+    btn.classList.remove("shrink");
+  });
+
+  btn.addEventListener("pointerleave", e => {
+    e.preventDefault();
+    btn.classList.remove("shrink");
+  });
+});
+
+
 
 
 
