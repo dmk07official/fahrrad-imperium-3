@@ -1,15 +1,26 @@
 let lastTap = 0;
 
 document.addEventListener('touchend', function(e) {
-    const currentTime = new Date().getTime();
+    const currentTime = Date.now();
     const tapLength = currentTime - lastTap;
-    
+
     if (tapLength < 300 && tapLength > 0) {
         e.preventDefault(); // kill double-tap zoom
+
+        // fake action, tut nix schweres
+        fakeAction(e);
     }
-    
+
     lastTap = currentTime;
-});
+}, { passive: false });
+
+function fakeAction(e) {
+    // nichts Großes, nur ein kleiner Fake-Trigger
+    console.log('Fake Tap Action triggered 🥴'); 
+    // optional: kleine Animation oder Dummy-Klasse hinzufügen
+    // e.target.classList.add('fake-tap'); setTimeout(() => e.target.classList.remove('fake-tap'), 100);
+}
+
 
 
 //Speichern, Laden, Variablen
