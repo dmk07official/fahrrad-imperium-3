@@ -19,7 +19,7 @@ document.querySelectorAll("button").forEach(btn => {
     // warte bis die Transition Zeit rum is
     timeout = setTimeout(() => {
       btn.classList.remove("shrink");
-    }, 200); // 200ms = deine transition-duration
+    }, 100); // 200ms = deine transition-duration
   });
 
   btn.addEventListener("pointerleave", e => {
