@@ -1,38 +1,19 @@
-
+html, body{
+margin: 0;
+padding: 0;
+width: 100%;
+height: 100%;
+box-sizing: border-box
+}
+html {
+scroll-behavior: smooth
+}
+body {
+text-align: center;
+background-color: #333
+}
 p, h1, h2{
 margin: 0
-}
-html, body {
-  margin:0;
-  padding:0;
-  height: 100%;
-  width: 100%;
-
-}
-body {
-  display: flex;
-  flex-direction: column;
-  background: #222;
-}
-body {
-  height: 100vh;
-  height: 100dvh;
-}
-.window {
-  flex: 1;
-  width: 100%;
-  padding-top: calc(var(--s) * 3);
-  padding-bottom: calc(var(--s) * 3);
-  min-height: 100vh;
-  display: none;
-  touch-action: pan-y;
-  overflow-y: auto;
-  background: url('window-bg.png'),
-  linear-gradient(to bottom, color-mix(in srgb, var(--c) 50%, #000 50%) -5%, #000 7.5%);
-  background-repeat: repeat;
-  background-size: calc(var(--s) * 6) auto;
-  background-attachment: scroll;
-  box-sizing: border-box;
 }
 
 /* Window Choose */
@@ -48,7 +29,6 @@ width: calc(var(--s) * 27.5);
 border-radius: 0  0 calc(var(--s) * 1)  calc(var(--s) * 1);
 height: calc(var(--s) * 3.25);
 background-color: rgba(20,20,20,0.6);
-overflow-x: auto;
 z-index: 998;
 margin: 0
 }
@@ -150,6 +130,24 @@ animation: blinkOpacity 1.5s infinite
 }
 
 /* Window */
+.window{
+width: 0;
+min-height: 0;
+background-color: #000;
+overflow-y: auto;
+padding-top: calc(var(--s) * 2.5);
+padding-bottom: calc(var(--s) * 2.5);
+box-sizing: border-box;
+opacity: 0;
+position: absolute;
+inset: 0;
+background: 
+url('window-bg.png'),
+linear-gradient(to bottom,color-mix(in srgb, var(--c) 50%, #000 50%) -5%, #000 7.5%);
+background-repeat: repeat;
+background-size: calc(var(--s) * 6) auto;
+background-attachment: local
+}
 
 /* Workshop */
 #workers,
@@ -1112,7 +1110,6 @@ font-size: calc(var(--s) * 0.8)
   border-radius: calc(var(--s) * 1);
   border: calc(var(--s) * 0.2) solid var(--c);
   margin: auto;
-  overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;

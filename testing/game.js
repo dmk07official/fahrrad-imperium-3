@@ -1,5 +1,3 @@
-
-
 //Speichern, Laden, Variablen
 let coins = 0;
 let prestigeCount = 0, prestigeMultiplier = 1, prestigeCost = 1000;
@@ -546,11 +544,15 @@ if (clickedButton) {
   clickedButton.classList.add('active');
 }
 document.querySelectorAll('.window').forEach(div => {
-  div.style.display = 'none';
+  div.style.opacity = '0';
+  div.style.width = '0';
+  div.style.height = '0';
 });
 const correspondingDiv = document.getElementById('window' + buttonId.charAt(0).toUpperCase() + buttonId.slice(1));
 if (correspondingDiv) {
-  correspondingDiv.style.display = 'block';
+  correspondingDiv.style.opacity = '1';
+  correspondingDiv.style.width = '100%';
+  correspondingDiv.style.minHeight = '100vh';
 }
 }
 
