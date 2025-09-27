@@ -1,9 +1,10 @@
-// leichte Dummy-Funktion, zieht quasi 0 Leistung
-function noop(e) {}
+let disable = 0;
+function noop(e) {
+    disable++;
+}
 
-// alle Elemente auswählen
 document.querySelectorAll('*').forEach(el => {
-    el.addEventListener('click', noop, { passive: true });
+    el.addEventListener('click', noop);
 });
 
 
