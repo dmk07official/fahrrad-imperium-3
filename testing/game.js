@@ -1,13 +1,8 @@
-
-function noop(e) {}
-
+//IOS Double Tab Kill
+function x(e) {}
 document.querySelectorAll('*').forEach(el => {
-    el.addEventListener('click', noop);
+    el.addEventListener('click', x);
 });
-
-
-
-
 
 //Speichern, Laden, Variablen
 let coins = 0;
