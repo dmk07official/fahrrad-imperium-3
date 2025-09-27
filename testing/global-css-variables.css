@@ -70,6 +70,7 @@ scrollbar-width: none;
 user-select: none;
 touch-action: pan-x pan-y;
 overscroll-behavior: none;
+-webkit-touch-callout: none;
 }
 
 @media (max-width: 359px){
