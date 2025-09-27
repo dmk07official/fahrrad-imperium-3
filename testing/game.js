@@ -1,7 +1,5 @@
-let disable = 0;
-function noop(e) {
-    disable++;
-}
+
+function noop(e) {}
 
 document.querySelectorAll('*').forEach(el => {
     el.addEventListener('click', noop);
