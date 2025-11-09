@@ -68,7 +68,7 @@ scrollbar-width: none;
 -moz-user-select: none;
 -ms-user-select: none;
 user-select: none;
-touch-action: none;
+touch-action: pan-y;
 overscroll-behavior: none;
 -webkit-touch-callout: none;
 }
