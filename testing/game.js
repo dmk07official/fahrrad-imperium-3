@@ -1,3 +1,62 @@
+class SmoothScroll {
+  constructor(selector) {
+    this.elements = document.querySelectorAll(selector);
+    this.elements.forEach(el => this.init(el));
+  }
+
+  init(el) {
+    let posY = 0;
+    let velocity = 0;
+    let lastY = 0;
+    let ticking = false;
+
+    const maxScroll = () => el.scrollHeight - el.clientHeight;
+
+    const update = () => {
+      velocity *= 0.95; // friction
+      posY += velocity;
+      if (posY < 0) posY = 0;
+      if (posY > maxScroll()) posY = maxScroll();
+      el.scrollTop = posY;
+
+      if (Math.abs(velocity) > 0.1) requestAnimationFrame(update);
+      else ticking = false;
+    };
+
+    el.addEventListener('touchstart', e => {
+      velocity = 0;
+      lastY = e.touches[0].pageY;
+    });
+
+    el.addEventListener('touchmove', e => {
+      const y = e.touches[0].pageY;
+      const delta = lastY - y;
+      posY += delta;
+      el.scrollTop = posY;
+      velocity = delta; // momentum
+      lastY = y;
+
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+
+      e.preventDefault(); // kill native scroll
+    });
+
+    el.addEventListener('touchend', e => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    });
+  }
+}
+
+// apply to all .window elements
+new SmoothScroll('.window');
+
+
 //IOS Double Tab Kill
 function x(e) {}
 document.querySelectorAll('*').forEach(el => {
